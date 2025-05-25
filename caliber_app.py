@@ -4,15 +4,11 @@ from datetime import datetime
 import re
 import matplotlib.pyplot as plt
 import seaborn as sns
-from crewai import Agent, Task, Crew
 from langchain_openai import ChatOpenAI
 from PIL import Image
 import os
 from utils_orig import get_openai_api_key
 from fpdf import FPDF
-
-from utils_orig import get_openai_api_key
-openai_api_key = get_openai_api_key()
 
 
 def sanitize_text(text):
@@ -29,7 +25,7 @@ def sanitize_text(text):
 
 openai_api_key = get_openai_api_key()
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
-llm = ChatOpenAI(model='gpt-4', temperature=0)
+llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0)
 
 st.set_page_config(page_title="CALIBER Leadership Inventory©", layout="centered")
 st.title("CALIBER Leadership Inventory©")
@@ -402,7 +398,6 @@ if st.session_state.page == max_page:
             #         mime="image/png"
             #     )
 
-            from crewai import Agent, Task, Crew
             import streamlit as st
             from PIL import Image
 
@@ -422,25 +417,6 @@ if st.session_state.page == max_page:
             birth_country = st.session_state.get("birth_country", "their country of origin")
 
             # Define the expert agent
-            leadership_expert = Agent(
-                role="Leadership Analyst",
-                goal="Interpret leadership survey results and explain their organizational relevance",
-                backstory=("""Use the formal yet motivational tone and structure found in the official CALIBER report, including:
-- Framing leadership as a balance between Innovation and Operations.
-- Referencing national culture through Hofstede dimensions.
-- A constructive tone, mixing affirmation with suggestions.
-- Sections that include both summary insights and action-oriented reflections.
-- Style that combines academic rigor with clarity and accessibility.
-Use terminology such as 'leadership effectiveness,' 'cultural alignment,' 'intercultural competency,' 'self-awareness,' and 'organizational learning.'
-Emphasize paradoxical nature of innovation vs. operations leadership and the interplay of national culture.
-"""
-+ "You are a leadership development expert with deep experience in executive coaching and organizational strategy. "
-                    "You use psychological theory and leadership science to contextualize feedback scores and explain their implications "
-                    "in clear, motivational language. You also emphasize the influence of national culture on leadership values and communication norms."
-                ),
-                allow_delegation=False,
-                verbose=True
-            )
 
             # Define the interpretation task
             summary_description = ("""
@@ -456,20 +432,20 @@ Emphasize paradoxical nature of innovation vs. operations leadership and the int
                 "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
             )
 
-            summary_task = Task(
-                description=summary_description,
-                expected_output="A concise, structured 1-page leadership feedback report customized to the participant's role, industry, and cultural context.",
-                agent=leadership_expert
-            )
-
             # Run the crew
-            crew = Crew(
-                agents=[leadership_expert],
-                tasks=[summary_task],
-                verbose=True
-            )
 
-            result = crew.kickoff()
+            
+            summary_prompt = f"""
+            Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}.
+            They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory.
+            Label their leadership category as '{level}'.
+            Reflect on implications for team performance and culture within the context of {participant_industry}.
+            Include how being born in {birth_country} and working in {country_work} affects leadership style.
+            Align analysis with Hofstede cultural dimensions: {', '.join(closest_cultures)}.
+            Use the official CALIBER tone: positive, structured, and actionable.
+            """
+            result = llm.predict(summary_prompt)
+
 
             # Show and offer download for report
             # st.subheader("📝 Leadership Expert Report")
@@ -551,7 +527,6 @@ Emphasize paradoxical nature of innovation vs. operations leadership and the int
 
             # === Next Page Preparation ===
             # Remove inline chart display, only save chart
-            # Prepare for CrewAI-driven interpretation on next page using saved image
             # try:
             #     image = Image.open(plot_path)
             #     st.image(image, caption="Overall Leadership Score", use_column_width=True)
@@ -613,154 +588,63 @@ Emphasize paradoxical nature of innovation vs. operations leadership and the int
             # Define second expert agent for interpretation
             from crewai import Agent, Task
 
-            page2_expert = Agent(
-                role="Leadership Dimension Interpreter",
-                goal="Provide insight on 10 leadership dimensions categorized into innovation and operations",
-                backstory=("""Use the formal yet motivational tone and structure found in the official CALIBER report, including:
-- Framing leadership as a balance between Innovation and Operations.
-- Referencing national culture through Hofstede dimensions.
-- A constructive tone, mixing affirmation with suggestions.
-- Sections that include both summary insights and action-oriented reflections.
-- Style that combines academic rigor with clarity and accessibility.
-Use terminology such as 'leadership effectiveness,' 'cultural alignment,' 'intercultural competency,' 'self-awareness,' and 'organizational learning.'
-Emphasize paradoxical nature of innovation vs. operations leadership and the interplay of national culture.
-"""
-+ "You are a leadership researcher skilled in assessing how different behavioral dimensions influence innovation and operational excellence."
-                ),
-                allow_delegation=False,
-                verbose=True
-            )
-
             # Compose interpretation task for dimensions
-            page2_task = Task(
-                description=(f"Use the same language style, structure, and tone as the official CALIBER report authored by Dr. M.A. Lakhani and Dr. M.J. Marquard. Write a summary interpreting the leadership scores in 10 dimensions. Separate discussion into Innovation (Communication, Vision, Authenticity, Empowerment, Creativity) "
-                    f"and Operations (Stewardship, Competence, Confidence, Reinforcement, Culture). Explain the significance of each score, what it suggests about leadership potential, "
-                    f"and how it impacts team and organizational effectiveness. Keep the language accessible and insightful."
-                ),
-                expected_output="Interpretation of leadership dimension scores categorized by innovation and operations.",
-                agent=page2_expert
-            )
 
-            page2_crew = Crew(
-                agents=[page2_expert],
-                tasks=[page2_task],
-                verbose=True
-            )
+            
+            page2_prompt = f"""
+            Write a summary interpreting the leadership scores in 10 dimensions.
+            Separate discussion into Innovation (Communication, Vision, Authenticity, Empowerment, Creativity) and Operations (Stewardship, Competence, Confidence, Reinforcement, Culture).
+            Explain the significance of each score, leadership potential, and team/organizational impact.
+            Use CALIBER tone, structure, and style.
+            """
+            page2_result = llm.predict(page2_prompt)
 
-            page2_result = page2_crew.kickoff()
             pdf.chapter_title("Interpretation of Innovation & Operations Dimensions")
             pdf.chapter_body(sanitize_text(page2_result))
             # pdf.add_image(bar_chart_path, "Leadership Dimension Breakdown")
             # Page 3 – National Culture Analysis
             pdf.add_page()
             pdf.chapter_title("Cultural Context and Implications")
+            
+            culture_prompt = f"""
+            Provide a concise analysis of how being born in {birth_country} but currently working in {country_work} might shape leadership expectations.
+            Reference Hofstede’s dimensions.
+            Include potential cultural tensions or synergies and leadership guidance.
+            Use the official CALIBER tone and structure.
+            """
+            culture_result = llm.predict(culture_prompt)
 
-            culture_expert = Agent(
-                role="Cultural Insight Analyst",
-                goal="Interpret leadership behaviors within the national cultural context",
-                backstory=("""Use the formal yet motivational tone and structure found in the official CALIBER report, including:
-- Framing leadership as a balance between Innovation and Operations.
-- Referencing national culture through Hofstede dimensions.
-- A constructive tone, mixing affirmation with suggestions.
-- Sections that include both summary insights and action-oriented reflections.
-- Style that combines academic rigor with clarity and accessibility.
-Use terminology such as 'leadership effectiveness,' 'cultural alignment,' 'intercultural competency,' 'self-awareness,' and 'organizational learning.'
-Emphasize paradoxical nature of innovation vs. operations leadership and the interplay of national culture.
-"""
-+ "You are a cultural anthropologist and organizational psychologist who specializes in how national culture influences leadership behavior."
-                ),
-                allow_delegation=False,
-                verbose=True
-            )
-
-            culture_task = Task(
-                description=(f"Use the same language style, structure, and tone as the official CALIBER report authored by Dr. M.A. Lakhani and Dr. M.J. Marquard. Provide a concise analysis of how being born in {birth_country} but currently working in {country_work} might shape leadership expectations. "
-                    f"Reference Hofstede’s dimensions if applicable. Include potential cultural tensions or synergies and how the participant can navigate them to become a stronger leader."
-                ),
-                expected_output="Cultural analysis with leadership relevance.",
-                agent=culture_expert
-            )
-
-            culture_crew = Crew(agents=[culture_expert], tasks=[culture_task], verbose=True)
-            culture_result = culture_crew.kickoff()
             pdf.chapter_body(sanitize_text(culture_result))
             pdf.add_image(hofstede_path, "Cultural Dimensions Profile (Hofstede)")
 
             # Page 4 – Actionable Recommendations
             pdf.add_page()
             pdf.chapter_title("Actionable Development Recommendations")
+            
+            coach_prompt = f"""
+            Write a structured and accessible development plan for {participant_name}.
+            Suggest 3–5 growth areas across Innovation and Operations dimensions.
+            Provide short rationale for each.
+            Comment on Hofstede cultural scores and alignments: {', '.join(closest_cultures)}.
+            Offer guidance for cross-cultural adaptability and leadership effectiveness.
+            Use CALIBER tone and format.
+            """
+            coach_result = llm.predict(coach_prompt)
 
-            coach_agent = Agent(
-                role="Leadership Coach",
-                goal="Offer personalized growth suggestions based on scores",
-                backstory=("""Use the formal yet motivational tone and structure found in the official CALIBER report, including:
-- Framing leadership as a balance between Innovation and Operations.
-- Referencing national culture through Hofstede dimensions.
-- A constructive tone, mixing affirmation with suggestions.
-- Sections that include both summary insights and action-oriented reflections.
-- Style that combines academic rigor with clarity and accessibility.
-Use terminology such as 'leadership effectiveness,' 'cultural alignment,' 'intercultural competency,' 'self-awareness,' and 'organizational learning.'
-Emphasize paradoxical nature of innovation vs. operations leadership and the interplay of national culture.
-"""
-+ "You are a leadership coach who crafts personalized development paths based on survey results."
-                ),
-                allow_delegation=False,
-                verbose=True
-            )
-
-            coach_task = Task(
-                description=(f"Use the same language style, structure, and tone as the official CALIBER report authored by Dr. M.A. Lakhani and Dr. M.J. Marquard. Using the same language style and tone as the official CALIBER report authored by Dr. M.A. Lakhani and Dr. M.J. Marquard, "
-                    f"write a thoughtful, structured, and accessible development plan for the participant ({participant_name}). "
-                    f"Include specific, constructive actions to improve Innovation and Operations dimensions. "
-                    f"Suggest 3–5 development areas with short rationale for each. "
-                    f"Also provide commentary on the participant’s Hofstede cultural scores and alignment with nations ({', '.join(closest_cultures)}). "
-                    f"Explain what this alignment suggests about their leadership behaviors, and offer guidance on how they can adapt across cultures while leading innovation and operations effectively."
-                ),
-                expected_output="CALIBER-style personalized development recommendations and intercultural leadership insights.",
-                agent=coach_agent
-            )
-
-            coach_crew = Crew(agents=[coach_agent], tasks=[coach_task], verbose=True)
-            coach_result = coach_crew.kickoff()
             pdf.chapter_body(sanitize_text(coach_result))
 
             # Page 5 – Invitation to 360-Degree CALIBER Assessment
             pdf.add_page()
             pdf.chapter_title("Invitation to 360-Degree CALIBER Assessment")
+            
+            invite_prompt = """
+            Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
+            Explain how it exposes biases, highlights cultural fit, tracks progress, and improves self-awareness.
+            Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
+            Use CALIBER style.
+            """
+            invite_result = llm.predict(invite_prompt)
 
-            invite_agent = Agent(
-                role="360 Assessment Advocate",
-                goal="Explain the benefits of a 360-degree CALIBER leadership inventory",
-                backstory=("""Use the formal yet motivational tone and structure found in the official CALIBER report, including:
-- Framing leadership as a balance between Innovation and Operations.
-- Referencing national culture through Hofstede dimensions.
-- A constructive tone, mixing affirmation with suggestions.
-- Sections that include both summary insights and action-oriented reflections.
-- Style that combines academic rigor with clarity and accessibility.
-Use terminology such as 'leadership effectiveness,' 'cultural alignment,' 'intercultural competency,' 'self-awareness,' and 'organizational learning.'
-Emphasize paradoxical nature of innovation vs. operations leadership and the interplay of national culture.
-"""
-+ "You are an expert in multi-source feedback systems and 360-degree leadership evaluations. You provide leaders with insight into how feedback from peers, subordinates, and supervisors reveals cognitive blind spots, cross-cultural misunderstandings, and opportunities for improved alignment."
-                ),
-                allow_delegation=False,
-                verbose=True
-            )
-
-            invite_task = Task(
-                description=f"""Write a compelling 1-page summary that introduces the CALIBER 360-degree leadership inventory. 
-            Emphasize how this multi-source feedback tool:
-            1. Exposes cognitive biases that traditional self-reports overlook.
-            2. Identifies specific leadership dimensions needing development with tailored, context-aware actions.
-            3. Maps leadership practices to national cultural profiles to highlight geographies where the leader would be most effective.
-            4. Allows for longitudinal progress tracking to measure development over time.
-            Additionally, highlight the value of understanding how others perceive you in different contexts -- across cultures, teams, and organizational levels. Reinforce how 360 feedback drives greater humility, inclusion, and influence. 
-            Close with a warm invitation to contact admin@caliberleadership.com for more information.""",
-                expected_output="Invitation and rationale for the 360-degree CALIBER assessment.",
-                agent=invite_agent
-            )
-
-            invite_crew = Crew(agents=[invite_agent], tasks=[invite_task], verbose=True)
-            invite_result = invite_crew.kickoff()
             pdf.chapter_body(sanitize_text(invite_result))
 
             pdf.output(pdf_filename)
