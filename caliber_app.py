@@ -10,6 +10,7 @@ from PIL import Image
 import os
 from utils_orig import get_openai_api_key
 from fpdf import FPDF
+import streamlit as st
 
 
 def sanitize_text(text):
@@ -26,7 +27,14 @@ def sanitize_text(text):
 
 openai_api_key = get_openai_api_key()
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
-llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0)
+# llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0)
+
+llm = ChatOpenAI(
+    model='gpt-3.5-turbo',
+    temperature=0,
+    openai_api_key=st.secrets["openai_api_key"]
+)
+
 
 st.set_page_config(page_title="CALIBER Leadership Inventory©", layout="centered")
 st.title("CALIBER Leadership Inventory©")
