@@ -1,0 +1,10 @@
+streamlit
+pandas
+matplotlib
+seaborn
+fpdf
+Pillow
+langchain
+crewai
+openai
+scipy
