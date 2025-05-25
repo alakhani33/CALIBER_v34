@@ -25,7 +25,7 @@ def sanitize_text(text):
     )
 
 
-openai_api_key = get_openai_api_key()
+# openai_api_key = get_openai_api_key()
 # os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 # llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0)
 
