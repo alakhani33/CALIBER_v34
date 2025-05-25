@@ -586,7 +586,7 @@ if st.session_state.page == max_page:
             pdf.add_image(bar_chart_path, "Dimension Breakdown (Innovation vs Operations)")
 
             # Define second expert agent for interpretation
-            from crewai import Agent, Task
+            # from crewai import Agent, Task
 
             # Compose interpretation task for dimensions
 
