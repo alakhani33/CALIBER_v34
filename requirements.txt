@@ -6,4 +6,5 @@ fpdf
 Pillow
 openai
 langchain
+langchain-community
 scikit-learn
