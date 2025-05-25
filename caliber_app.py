@@ -4,7 +4,8 @@ from datetime import datetime
 import re
 import matplotlib.pyplot as plt
 import seaborn as sns
-from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
+from langchain.chat_models import ChatOpenAI
 from PIL import Image
 import os
 from utils_orig import get_openai_api_key

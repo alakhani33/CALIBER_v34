@@ -4,6 +4,6 @@ matplotlib
 seaborn
 fpdf
 Pillow
-langchain
 openai
-scipy
+langchain
+scikit-learn
