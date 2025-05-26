@@ -39,7 +39,36 @@ folder_id = "1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"
     
 #     return uploaded_file.get("id")
 
+# def upload_to_drive(file_path, file_name, mime_type, folder_id):
+#     service = build("drive", "v3", credentials=credentials)
+
+#     file_metadata = {
+#         "name": file_name,
+#         "parents": [folder_id]
+#     }
+#     media = MediaFileUpload(file_path, mimetype=mime_type)
+
+#     uploaded_file = service.files().create(
+#         body=file_metadata,
+#         media_body=media,
+#         fields="id"
+#     ).execute()
+
+#     return uploaded_file.get("id")
+
+
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gdrive"],
+    scopes=["https://www.googleapis.com/auth/drive"]
+)
+
 def upload_to_drive(file_path, file_name, mime_type, folder_id):
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gdrive"],
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
     service = build("drive", "v3", credentials=credentials)
 
     file_metadata = {
@@ -56,13 +85,6 @@ def upload_to_drive(file_path, file_name, mime_type, folder_id):
 
     return uploaded_file.get("id")
 
-
-from google.oauth2 import service_account
-
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gdrive"],
-    scopes=["https://www.googleapis.com/auth/drive"]
-)
 
 def sanitize_text(text):
     return (
