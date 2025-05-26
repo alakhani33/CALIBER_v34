@@ -131,7 +131,7 @@ import gradio as gr
 import requests
 import json
 
-# Set the model name for our LLMs.
+# Set the model name for our LLMs
 GEMINI_MODEL = "gemini-1.5-flash"
 # Store the API key in a variable.
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
