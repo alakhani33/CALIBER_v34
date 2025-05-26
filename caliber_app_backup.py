@@ -8,47 +8,6 @@ import seaborn as sns
 from langchain.chat_models import ChatOpenAI
 from PIL import Image
 import os
-
-
-from reportlab.lib.pagesizes import LETTER
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-
-def generate_caliber_report_with_cover(
-    output_path,
-    participant_name,
-    report_date,
-    sections_dict
-):
-    doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=72, bottomMargin=72)
-
-    styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-    styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-    story = []
-
-    # Cover page
-    story.append(Spacer(1, 2 * inch))
-    story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-    story.append(Paragraph(participant_name, styles["CoverSub"]))
-    story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-    story.append(PageBreak())
-
-    # Main content
-    for section, content in sections_dict.items():
-        story.append(Paragraph(section, styles["Heading"]))
-        story.append(Paragraph(content, styles["Body"]))
-        story.append(Spacer(1, 0.2 * inch))
-
-    doc.build(story)
-    return output_path
-
 from utils_orig import get_openai_api_key
 from fpdf import FPDF
 import streamlit as st
@@ -106,47 +65,6 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 
 import os
-
-
-from reportlab.lib.pagesizes import LETTER
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-
-def generate_caliber_report_with_cover(
-    output_path,
-    participant_name,
-    report_date,
-    sections_dict
-):
-    doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=72, bottomMargin=72)
-
-    styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-    styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-    story = []
-
-    # Cover page
-    story.append(Spacer(1, 2 * inch))
-    story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-    story.append(Paragraph(participant_name, styles["CoverSub"]))
-    story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-    story.append(PageBreak())
-
-    # Main content
-    for section, content in sections_dict.items():
-        story.append(Paragraph(section, styles["Heading"]))
-        story.append(Paragraph(content, styles["Body"]))
-        story.append(Spacer(1, 0.2 * inch))
-
-    doc.build(story)
-    return output_path
-
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
@@ -541,7 +459,13 @@ if st.session_state.page == max_page:
             participant_name = st.session_state.get("name", "anonymous")
             clean_name = re.sub(r'\W+', '_', participant_name.strip())
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"caliber_survey_{clean_name}_{timestamp}.csv"
+            # filename = f"caliber_survey_{clean_name}_{timestamp}.csv"
+            # filename = os.path.join(".", f"caliber_survey_{clean_name}_{timestamp}.csv")
+            tmp_dir = "/tmp"
+
+            # pdf_filename = os.path.join(tmp_dir, f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            filename = os.path.join(tmp_dir, f"caliber_survey_{clean_name}_{timestamp}.csv")
+
 
             df_combined.to_csv(filename, index=False)
 
@@ -655,47 +579,6 @@ if st.session_state.page == max_page:
             import seaborn as sns
             import os
 
-
-            from reportlab.lib.pagesizes import LETTER
-            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-            from reportlab.lib.units import inch
-
-            def generate_caliber_report_with_cover(
-                output_path,
-                participant_name,
-                report_date,
-                sections_dict
-            ):
-                doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                                        rightMargin=72, leftMargin=72,
-                                        topMargin=72, bottomMargin=72)
-
-                styles = getSampleStyleSheet()
-                styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-                styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-                styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-                styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-                story = []
-
-                # Cover page
-                story.append(Spacer(1, 2 * inch))
-                story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-                story.append(Paragraph(participant_name, styles["CoverSub"]))
-                story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-                story.append(PageBreak())
-
-                # Main content
-                for section, content in sections_dict.items():
-                    story.append(Paragraph(section, styles["Heading"]))
-                    story.append(Paragraph(content, styles["Body"]))
-                    story.append(Spacer(1, 0.2 * inch))
-
-                doc.build(story)
-                return output_path
-
-
             # === Generate and Save Bar Chart ===
             # === Create and Save Hofstede Chart First ===
             hofstede_keys = [
@@ -785,7 +668,14 @@ if st.session_state.page == max_page:
                 )
 
 
-            pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
+            # pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
+            # pdf_filename = os.path.join(".", f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            tmp_dir = "/tmp"
+
+            pdf_filename = os.path.join(tmp_dir, f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            # filename = os.path.join(tmp_dir, f"caliber_survey_{clean_name}_{timestamp}.csv")
+
+            
             class PDFReport(FPDF):
                 def footer(self):
                     self.set_y(-10)
@@ -877,7 +767,7 @@ if st.session_state.page == max_page:
             invite_prompt = """
             Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
             Explain how it exposes biases, highlights cultural fit, tracks progress, and improves self-awareness.
-            Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
+            Encourage multi-source feedback and close with an invitation to contact caliber.leadership.inventory@gmail.com.
             Use CALIBER style.
             """
             invite_result = llm.predict(invite_prompt)
@@ -908,14 +798,23 @@ if st.session_state.page == max_page:
             # st.write(f"CSV File ID: {csv_drive_id}")
             # st.write(f"PDF File ID: {pdf_drive_id}")
 
+            # st.write("Uploading these files:")
+            # st.write(f"PDF path: {pdf_filename}, Exists: {os.path.exists(pdf_filename)}")
+            # st.write(f"CSV path: {filename}, Exists: {os.path.exists(filename)}")
+            st.write("🧪 File check:")
+            st.write(f"PDF exists: {os.path.exists(pdf_filename)}")
+            st.write(f"CSV exists: {os.path.exists(filename)}")
+
             try:
-                csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+                # csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+                csv_drive_id = upload_to_drive(filename, f"caliber_survey_{clean_name}_{timestamp}.csv","text/csv",folder_id)
                 st.success(f"✅ CSV uploaded to Drive (File ID: {csv_drive_id})")
             except Exception as e:
                 st.error(f"❌ CSV upload failed: {e}")
 
             try:
-                pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+                # pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+                pdf_drive_id = upload_to_drive(pdf_filename, f"leadership_summary_{clean_name}_{timestamp}.pdf","application/pdf",folder_id)
                 st.success(f"✅ PDF uploaded to Drive (File ID: {pdf_drive_id})")
             except Exception as e:
                 st.error(f"❌ PDF upload failed: {e}")
