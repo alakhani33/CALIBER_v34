@@ -440,7 +440,11 @@ if st.session_state.page == max_page:
             clean_name = re.sub(r'\W+', '_', participant_name.strip())
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             # filename = f"caliber_survey_{clean_name}_{timestamp}.csv"
-            filename = os.path.join(".", f"caliber_survey_{clean_name}_{timestamp}.csv")
+            # filename = os.path.join(".", f"caliber_survey_{clean_name}_{timestamp}.csv")
+            tmp_dir = "/tmp"
+
+            # pdf_filename = os.path.join(tmp_dir, f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            filename = os.path.join(tmp_dir, f"caliber_survey_{clean_name}_{timestamp}.csv")
 
 
             df_combined.to_csv(filename, index=False)
@@ -645,7 +649,11 @@ if st.session_state.page == max_page:
 
 
             # pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
-            pdf_filename = os.path.join(".", f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            # pdf_filename = os.path.join(".", f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            tmp_dir = "/tmp"
+
+            pdf_filename = os.path.join(tmp_dir, f"leadership_summary_{clean_name}_{timestamp}.pdf")
+            # filename = os.path.join(tmp_dir, f"caliber_survey_{clean_name}_{timestamp}.csv")
 
             
             class PDFReport(FPDF):
@@ -770,19 +778,23 @@ if st.session_state.page == max_page:
             # st.write(f"CSV File ID: {csv_drive_id}")
             # st.write(f"PDF File ID: {pdf_drive_id}")
 
-            st.write("Uploading these files:")
-            st.write(f"PDF path: {pdf_filename}, Exists: {os.path.exists(pdf_filename)}")
-            st.write(f"CSV path: {filename}, Exists: {os.path.exists(filename)}")
-
+            # st.write("Uploading these files:")
+            # st.write(f"PDF path: {pdf_filename}, Exists: {os.path.exists(pdf_filename)}")
+            # st.write(f"CSV path: {filename}, Exists: {os.path.exists(filename)}")
+            st.write("🧪 File check:")
+            st.write(f"PDF exists: {os.path.exists(pdf_filename)}")
+            st.write(f"CSV exists: {os.path.exists(filename)}")
 
             try:
-                csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+                # csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+                csv_drive_id = upload_to_drive(filename, f"caliber_survey_{clean_name}_{timestamp}.csv","text/csv",folder_id)
                 st.success(f"✅ CSV uploaded to Drive (File ID: {csv_drive_id})")
             except Exception as e:
                 st.error(f"❌ CSV upload failed: {e}")
 
             try:
-                pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+                # pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+                pdf_drive_id = upload_to_drive(pdf_filename, f"leadership_summary_{clean_name}_{timestamp}.pdf","application/pdf",folder_id)
                 st.success(f"✅ PDF uploaded to Drive (File ID: {pdf_drive_id})")
             except Exception as e:
                 st.error(f"❌ PDF upload failed: {e}")
