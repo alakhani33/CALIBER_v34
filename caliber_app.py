@@ -439,7 +439,9 @@ if st.session_state.page == max_page:
             participant_name = st.session_state.get("name", "anonymous")
             clean_name = re.sub(r'\W+', '_', participant_name.strip())
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"caliber_survey_{clean_name}_{timestamp}.csv"
+            # filename = f"caliber_survey_{clean_name}_{timestamp}.csv"
+            filename = os.path.join(".", f"caliber_survey_{clean_name}_{timestamp}.csv")
+
 
             df_combined.to_csv(filename, index=False)
 
@@ -642,7 +644,10 @@ if st.session_state.page == max_page:
                 )
 
 
-            pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
+            # pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
+            pdf_filename = os.path.join(".", f"leadership_summary_{clean_name}_{timestamp}.pdf")
+
+            
             class PDFReport(FPDF):
                 def footer(self):
                     self.set_y(-10)
@@ -764,6 +769,11 @@ if st.session_state.page == max_page:
             # st.success("✅ Uploaded to Google Drive!")
             # st.write(f"CSV File ID: {csv_drive_id}")
             # st.write(f"PDF File ID: {pdf_drive_id}")
+
+            st.write("Uploading these files:")
+            st.write(f"PDF path: {pdf_filename}, Exists: {os.path.exists(pdf_filename)}")
+            st.write(f"CSV path: {filename}, Exists: {os.path.exists(filename)}")
+
 
             try:
                 csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
