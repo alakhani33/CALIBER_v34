@@ -668,8 +668,8 @@ if st.session_state.page == max_page:
                 plt.close(fig)
 
             # Save and show plot
-            plot_filename = f"leadership_score_{clean_name}_{timestamp}.png"
-            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_filename)
+            plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
+            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
 
             # st.image(plot_filename, caption="Your Overall Leadership Score", use_column_width=True)
 
