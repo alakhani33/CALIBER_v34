@@ -754,8 +754,8 @@ if st.session_state.page == max_page:
             # Insert the images
 
             # Define image paths
-            plot_path1 = f"leadership_score_{clean_name}_{timestamp}.png"
-            bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
+            # plot_path1 = f"leadership_score_{clean_name}_{timestamp}.png"
+            # bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
             import matplotlib.pyplot as plt
             import seaborn as sns
             import os
