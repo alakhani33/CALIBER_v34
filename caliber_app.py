@@ -715,18 +715,30 @@ if st.session_state.page == max_page:
                     mime="application/pdf"
                 )
 
-            csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
-            pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", "your-folder-id")
+            # csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+            # pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", "your-folder-id")
 
-            pdf_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
-            if pdf_id:
-                st.success("✅ PDF uploaded to Drive!")
-            else:
-                st.error("❌ PDF upload failed.")
+            # pdf_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+            # if pdf_id:
+            #     st.success("✅ PDF uploaded to Drive!")
+            # else:
+            #     st.error("❌ PDF upload failed.")
 
-            st.success("✅ Uploaded to Google Drive!")
-            st.write(f"CSV File ID: {csv_drive_id}")
-            st.write(f"PDF File ID: {pdf_drive_id}")
+            # st.success("✅ Uploaded to Google Drive!")
+            # st.write(f"CSV File ID: {csv_drive_id}")
+            # st.write(f"PDF File ID: {pdf_drive_id}")
+
+            try:
+                csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
+                st.success(f"✅ CSV uploaded to Drive (File ID: {csv_drive_id})")
+            except Exception as e:
+                st.error(f"❌ CSV upload failed: {e}")
+
+            try:
+                pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+                st.success(f"✅ PDF uploaded to Drive (File ID: {pdf_drive_id})")
+            except Exception as e:
+                st.error(f"❌ PDF upload failed: {e}")
 
             
             # Show text result
