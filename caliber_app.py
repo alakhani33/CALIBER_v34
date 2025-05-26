@@ -18,26 +18,44 @@ from googleapiclient.http import MediaFileUpload
 
 folder_id = "1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"
 
-def upload_to_drive(file_path, file_name, mime_type, folder_id):
-    credentials = service_account.Credentials.from_service_account_file(
-        "drive_service_account.json",
-        scopes=["https://www.googleapis.com/auth/drive"]
-    )
-    service = build("drive", "v3", credentials=credentials)
+# def upload_to_drive(file_path, file_name, mime_type, folder_id):
+#     credentials = service_account.Credentials.from_service_account_file(
+#         "drive_service_account.json",
+#         scopes=["https://www.googleapis.com/auth/drive"]
+#     )
+#     service = build("drive", "v3", credentials=credentials)
     
+#     file_metadata = {
+#         "name": file_name,
+#         "parents": [folder_id]
+#     }
+#     media = MediaFileUpload(file_path, mimetype=mime_type)
+    
+#     uploaded_file = service.files().create(
+#         body=file_metadata,
+#         media_body=media,
+#         fields="id"
+#     ).execute()
+    
+#     return uploaded_file.get("id")
+
+def upload_to_drive(file_path, file_name, mime_type, folder_id):
+    service = build("drive", "v3", credentials=credentials)
+
     file_metadata = {
         "name": file_name,
         "parents": [folder_id]
     }
     media = MediaFileUpload(file_path, mimetype=mime_type)
-    
+
     uploaded_file = service.files().create(
         body=file_metadata,
         media_body=media,
         fields="id"
     ).execute()
-    
+
     return uploaded_file.get("id")
+
 
 from google.oauth2 import service_account
 
