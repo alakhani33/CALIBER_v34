@@ -64,26 +64,41 @@ credentials = service_account.Credentials.from_service_account_info(
     scopes=["https://www.googleapis.com/auth/drive"]
 )
 
+import os
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+
 def upload_to_drive(file_path, file_name, mime_type, folder_id):
+    # Sanity check: file must exist
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"{file_path} does not exist.")
+
     credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gdrive"],
         scopes=["https://www.googleapis.com/auth/drive"]
     )
     service = build("drive", "v3", credentials=credentials)
 
-    file_metadata = {
-        "name": file_name,
-        "parents": [folder_id]
-    }
-    media = MediaFileUpload(file_path, mimetype=mime_type)
+    try:
+        file_metadata = {
+            "name": file_name,
+            "parents": [folder_id]
+        }
 
-    uploaded_file = service.files().create(
-        body=file_metadata,
-        media_body=media,
-        fields="id"
-    ).execute()
+        media = MediaFileUpload(file_path, mimetype=mime_type, resumable=False)
 
-    return uploaded_file.get("id")
+        uploaded_file = service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields="id"
+        ).execute()
+
+        return uploaded_file.get("id")
+
+    except Exception as e:
+        raise RuntimeError(f"Drive upload failed: {e}")
+
 
 
 def sanitize_text(text):
