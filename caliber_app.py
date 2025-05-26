@@ -25,11 +25,20 @@ def clean_markdown(text):
     return text.replace("\n\n", "<br/><br/>").replace("\n", "<br/>")  # line breaks
 
 
+# def generate_caliber_report_with_cover(
+#     output_path,
+#     participant_name,
+#     report_date,
+#     sections_dict
+# ):
 def generate_caliber_report_with_cover(
     output_path,
     participant_name,
     report_date,
-    sections_dict
+    sections_dict,
+    plot_path=None,
+    bar_chart_path=None,
+    hofstede_path=None
 ):
     doc = SimpleDocTemplate(output_path, pagesize=LETTER,
                             rightMargin=72, leftMargin=72,
@@ -149,11 +158,20 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 
+# def generate_caliber_report_with_cover(
+#     output_path,
+#     participant_name,
+#     report_date,
+#     sections_dict
+# ):
 def generate_caliber_report_with_cover(
     output_path,
     participant_name,
     report_date,
-    sections_dict
+    sections_dict,
+    plot_path=None,
+    bar_chart_path=None,
+    hofstede_path=None
 ):
     doc = SimpleDocTemplate(output_path, pagesize=LETTER,
                             rightMargin=72, leftMargin=72,
@@ -748,11 +766,20 @@ if st.session_state.page == max_page:
             from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
             from reportlab.lib.units import inch
 
+            # def generate_caliber_report_with_cover(
+            #     output_path,
+            #     participant_name,
+            #     report_date,
+            #     sections_dict
+            # ):
             def generate_caliber_report_with_cover(
                 output_path,
                 participant_name,
                 report_date,
-                sections_dict
+                sections_dict,
+                plot_path=None,
+                bar_chart_path=None,
+                hofstede_path=None
             ):
                 doc = SimpleDocTemplate(output_path, pagesize=LETTER,
                                         rightMargin=72, leftMargin=72,
@@ -1033,12 +1060,22 @@ if st.session_state.page == max_page:
                 "Invitation to 360-Degree CALIBER Assessment": invite_result
             }
 
+            # generate_caliber_report_with_cover(
+            #     output_path=pdf_filename,
+            #     participant_name=participant_name,
+            #     report_date=report_date,
+            #     sections_dict=section_dict
+            # )
             generate_caliber_report_with_cover(
                 output_path=pdf_filename,
                 participant_name=participant_name,
                 report_date=report_date,
-                sections_dict=section_dict
+                sections_dict=section_dict,
+                plot_path=plot_path1,
+                bar_chart_path=bar_chart_path,
+                hofstede_path=hofstede_path
             )
+
 
 
             # pdf.output(pdf_filename)
