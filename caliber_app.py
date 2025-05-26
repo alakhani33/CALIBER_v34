@@ -114,11 +114,31 @@ def sanitize_text(text):
 
 
 
-llm = ChatOpenAI(
-    model='gpt-3.5-turbo',
-    temperature=0,
-    openai_api_key=st.secrets["openai_api_key"]
-)
+# llm = ChatOpenAI(
+#     model='gpt-3.5-turbo',
+#     temperature=0,
+#     openai_api_key=st.secrets["openai_api_key"]
+# )
+from langchain.document_loaders import WebBaseLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import FAISS
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain.chains import RetrievalQA
+from langchain.tools import Tool
+from langchain.agents import initialize_agent, load_tools
+from langchain_google_genai import ChatGoogleGenerativeAI
+import gradio as gr
+import requests
+import json
+
+# Set the model name for our LLMs.
+GEMINI_MODEL = "gemini-1.5-flash"
+# Store the API key in a variable.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+# ✅ Initialize the model
+llm = ChatGoogleGenerativeAI(google_api_key=GEMINI_API_KEY, model=GEMINI_MODEL, temperature=0.3)
+
 
 
 st.set_page_config(page_title="CALIBER Leadership Inventory©", layout="centered")
@@ -747,7 +767,7 @@ if st.session_state.page == max_page:
             invite_prompt = """
             Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
             Explain how it exposes biases, highlights cultural fit, tracks progress, and improves self-awareness.
-            Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
+            Encourage multi-source feedback and close with an invitation to contact caliber.leadership.inventory@gmail.com.
             Use CALIBER style.
             """
             invite_result = llm.predict(invite_prompt)
