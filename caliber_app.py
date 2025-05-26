@@ -664,6 +664,30 @@ if st.session_state.page == max_page:
                 st.stop()  # Stop further execution (no report generation)
 
 
+            
+            # st.image(plot_filename, caption="Your Overall Leadership Score", use_column_width=True)
+
+            # with open(plot_filename, "rb") as f:
+            #     st.download_button(
+            #         label="📊 Download Your Score Plot",
+            #         data=f,
+            #         file_name=plot_filename,
+            #         mime="image/png"
+            #     )
+
+            import streamlit as st
+            from PIL import Image
+
+            # Determine leadership level from score
+            score_pct = leadership_custom_scores['Overall Leadership PCT'] * 100
+            if score_pct <= 33.33:
+                level = "Aspiring Leader"
+            elif score_pct <= 66.66:
+                level = "Developing Leader"
+            else:
+                level = "Performing Leader"
+
+
             # Create and save leadership score plot
             def create_leadership_plot(score, save_path):
                 fig, ax = plt.subplots(figsize=(10, 2))
@@ -695,27 +719,6 @@ if st.session_state.page == max_page:
             plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
             create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
 
-            # st.image(plot_filename, caption="Your Overall Leadership Score", use_column_width=True)
-
-            # with open(plot_filename, "rb") as f:
-            #     st.download_button(
-            #         label="📊 Download Your Score Plot",
-            #         data=f,
-            #         file_name=plot_filename,
-            #         mime="image/png"
-            #     )
-
-            import streamlit as st
-            from PIL import Image
-
-            # Determine leadership level from score
-            score_pct = leadership_custom_scores['Overall Leadership PCT'] * 100
-            if score_pct <= 33.33:
-                level = "Aspiring Leader"
-            elif score_pct <= 66.66:
-                level = "Developing Leader"
-            else:
-                level = "Performing Leader"
 
             # Collect contextual inputs
             participant_role = st.session_state.get("job_function", "a professional")
@@ -1158,35 +1161,35 @@ if st.session_state.page == max_page:
 
             # === Display Hofstede Cultural Dimension Chart ===
             # Create and display chart from dimension_custom_scores (Hofstede)
-            hofstede_keys = [
-                "High Uncertainty Avoidance PCT",
-                "High Individualism PCT",
-                "High Power Distance PCT",
-                "Long-Term Orientation PCT",
-                "High Masculinity PCT"
-            ]
+            # hofstede_keys = [
+            #     "High Uncertainty Avoidance PCT",
+            #     "High Individualism PCT",
+            #     "High Power Distance PCT",
+            #     "Long-Term Orientation PCT",
+            #     "High Masculinity PCT"
+            # ]
 
-            hofstede_scores = [dimension_custom_scores[k] * 100 for k in hofstede_keys]
-            hofstede_labels = [
-                "Uncertainty Avoidance",
-                "Individualism",
-                "Power Distance",
-                "Long-Term Orientation",
-                "Masculinity"
-            ]
+            # hofstede_scores = [dimension_custom_scores[k] * 100 for k in hofstede_keys]
+            # hofstede_labels = [
+            #     "Uncertainty Avoidance",
+            #     "Individualism",
+            #     "Power Distance",
+            #     "Long-Term Orientation",
+            #     "Masculinity"
+            # ]
 
-            fig, ax = plt.subplots(figsize=(10, 5))
-            sns.barplot(x=hofstede_scores, y=hofstede_labels, palette="Blues_d", ax=ax)
-            ax.set_xlim(0, 100)
-            ax.set_title("Cultural Dimensions Profile (Hofstede)")
-            ax.set_xlabel("Score")
-            ax.set_ylabel("")
-            sns.despine()
+            # fig, ax = plt.subplots(figsize=(10, 5))
+            # sns.barplot(x=hofstede_scores, y=hofstede_labels, palette="Blues_d", ax=ax)
+            # ax.set_xlim(0, 100)
+            # ax.set_title("Cultural Dimensions Profile (Hofstede)")
+            # ax.set_xlabel("Score")
+            # ax.set_ylabel("")
+            # sns.despine()
 
-            hofstede_path = f"hofstede_chart_{clean_name}_{timestamp}.png"
-            fig.tight_layout()
-            fig.savefig(hofstede_path, dpi=150)
-            plt.close(fig)
+            # hofstede_path = f"hofstede_chart_{clean_name}_{timestamp}.png"
+            # fig.tight_layout()
+            # fig.savefig(hofstede_path, dpi=150)
+            # plt.close(fig)
 
             # try:
             #     # hofstede_img = Image.open(hofstede_path)
@@ -1204,12 +1207,12 @@ if st.session_state.page == max_page:
             # st.subheader("🎯 Actionable Development Recommendations")
             # # st.write(coach_result)
 
-            report_filename = f"leadership_report_{clean_name}_{timestamp}.txt"
-            with open(report_filename, "w", encoding="utf-8") as f:
-                f.write(result)
+            # report_filename = f"leadership_report_{clean_name}_{timestamp}.txt"
+            # with open(report_filename, "w", encoding="utf-8") as f:
+            #     f.write(result)
 
-            with open(pdf_filename, "rb") as f:
-                st.markdown("<div style='text-align: center; font-size: 0.8em; color: gray; margin-top: 2rem;'>© 2025 M.A. Lakhani. All rights reserved.</div>", unsafe_allow_html=True)
+            # with open(pdf_filename, "rb") as f:
+            #     st.markdown("<div style='text-align: center; font-size: 0.8em; color: gray; margin-top: 2rem;'>© 2025 M.A. Lakhani. All rights reserved.</div>", unsafe_allow_html=True)
 
             # with open(pdf_filename, "rb") as f:
             #     st.download_button(
