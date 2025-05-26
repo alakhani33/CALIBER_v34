@@ -15,6 +15,16 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 
+import re
+
+def clean_markdown(text):
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)   # remove bold
+    text = re.sub(r'__([^_]+)__', r'\1', text)     # remove underline
+    text = re.sub(r'#+ ', '', text)               # remove headings
+    text = re.sub(r'^\s*[-*]\s+', '• ', text, flags=re.MULTILINE)  # bullets
+    return text.replace("\n\n", "<br/><br/>").replace("\n", "<br/>")  # line breaks
+
+
 def generate_caliber_report_with_cover(
     output_path,
     participant_name,
@@ -43,7 +53,8 @@ def generate_caliber_report_with_cover(
     # Main content
     for section, content in sections_dict.items():
         story.append(Paragraph(section, styles["Heading"]))
-        story.append(Paragraph(content, styles["Body"]))
+        cleaned_content = clean_markdown(content)
+        story.append(Paragraph(cleaned_content, styles["Body"]))
         story.append(Spacer(1, 0.2 * inch))
 
     doc.build(story)
