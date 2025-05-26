@@ -71,25 +71,28 @@ def generate_caliber_report_with_cover(
         story.append(Paragraph(section, styles["Heading"]))
         cleaned_content = clean_markdown(content)
         story.append(Paragraph(cleaned_content, styles["Body"]))
-
+        
+        
         # Optional image logic
         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
             story.append(Spacer(1, 0.1 * inch))
             story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
 
-        elif "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+        if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
             story.append(Spacer(1, 0.1 * inch))
             story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
             story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
 
-        elif "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+        if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
             story.append(Spacer(1, 0.1 * inch))
             story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
 
-        
-        
+        story.append(Spacer(1, 0.3 * inch))
+    
+
+
     doc.build(story)
     return output_path
 
@@ -163,74 +166,97 @@ from reportlab.lib.units import inch
 #     report_date,
 #     sections_dict
 # ):
-def generate_caliber_report_with_cover(
-    output_path,
-    participant_name,
-    report_date,
-    sections_dict,
-    plot_path=None,
-    bar_chart_path=None,
-    hofstede_path=None
-):
-    doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=72, bottomMargin=72)
+# def generate_caliber_report_with_cover(
+#     output_path,
+#     participant_name,
+#     report_date,
+#     sections_dict,
+#     plot_path=None,
+#     bar_chart_path=None,
+#     hofstede_path=None
+# ):
+#     doc = SimpleDocTemplate(output_path, pagesize=LETTER,
+#                             rightMargin=72, leftMargin=72,
+#                             topMargin=72, bottomMargin=72)
 
-    styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-    styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
+#     styles = getSampleStyleSheet()
+#     styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
+#     styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
+#     styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
+#     styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
 
-    story = []
+#     story = []
 
-    # Cover page
-    story.append(Spacer(1, 2 * inch))
-    story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-    story.append(Paragraph(participant_name, styles["CoverSub"]))
-    story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-    story.append(PageBreak())
+#     # Cover page
+#     story.append(Spacer(1, 2 * inch))
+#     story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
+#     story.append(Paragraph(participant_name, styles["CoverSub"]))
+#     story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
+#     story.append(PageBreak())
 
-    # # Main content
-    # for section, content in sections_dict.items():
-    #     story.append(Paragraph(section, styles["Heading"]))
-    #     story.append(Paragraph(content, styles["Body"]))
-    #     story.append(Spacer(1, 0.2 * inch))
-    from reportlab.platypus import Image as RLImage
+#     # # Main content
+#     # for section, content in sections_dict.items():
+#     #     story.append(Paragraph(section, styles["Heading"]))
+#     #     story.append(Paragraph(content, styles["Body"]))
+#     #     story.append(Spacer(1, 0.2 * inch))
+#     from reportlab.platypus import Image as RLImage
 
-    # for section, content in sections_dict.items():
-    #     story.append(Paragraph(section, styles["Heading"]))
-    #     cleaned_content = clean_markdown(content)
-    #     story.append(Paragraph(cleaned_content, styles["Body"]))
-    from reportlab.platypus import Image as RLImage
+#     # for section, content in sections_dict.items():
+#     #     story.append(Paragraph(section, styles["Heading"]))
+#     #     cleaned_content = clean_markdown(content)
+#     #     story.append(Paragraph(cleaned_content, styles["Body"]))
+#     from reportlab.platypus import Image as RLImage
 
-    for section, content in sections_dict.items():
-        story.append(Paragraph(section, styles["Heading"]))
-        cleaned_content = clean_markdown(content)
-        story.append(Paragraph(cleaned_content, styles["Body"]))
+#     for section, content in sections_dict.items():
+#         story.append(Paragraph(section, styles["Heading"]))
+#         cleaned_content = clean_markdown(content)
+#         story.append(Paragraph(cleaned_content, styles["Body"]))
+        
+        
+#         # Optional image logic
+#         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+#             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
 
-        # Optional image logic
-        if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-            story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+#         if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+#             story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
 
-        elif "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-            story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+#         if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+#             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
 
-        elif "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-            story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+#         story.append(Spacer(1, 0.3 * inch))
+    
 
         
-                
         
+#         # Optional image logic
+#         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+#             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
 
-    doc.build(story)
-    return output_path
+#         if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+#             story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+
+#         if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+#             story.append(Spacer(1, 0.1 * inch))
+#             story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+#             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+
+#         story.append(Spacer(1, 0.3 * inch))
+    
+
+
+
+#     doc.build(story)
+#     return output_path
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -752,138 +778,160 @@ if st.session_state.page == max_page:
             #     report_date,
             #     sections_dict
             # ):
-            def generate_caliber_report_with_cover(
-                output_path,
-                participant_name,
-                report_date,
-                sections_dict,
-                plot_path=None,
-                bar_chart_path=None,
-                hofstede_path=None
-            ):
-                doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                                        rightMargin=72, leftMargin=72,
-                                        topMargin=72, bottomMargin=72)
+        #     def generate_caliber_report_with_cover(
+        #         output_path,
+        #         participant_name,
+        #         report_date,
+        #         sections_dict,
+        #         plot_path=None,
+        #         bar_chart_path=None,
+        #         hofstede_path=None
+        #     ):
+        #         doc = SimpleDocTemplate(output_path, pagesize=LETTER,
+        #                                 rightMargin=72, leftMargin=72,
+        #                                 topMargin=72, bottomMargin=72)
 
-                styles = getSampleStyleSheet()
-                styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-                styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-                styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-                styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
+        #         styles = getSampleStyleSheet()
+        #         styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
+        #         styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
+        #         styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
+        #         styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
 
-                story = []
+        #         story = []
 
-                # Cover page
-                story.append(Spacer(1, 2 * inch))
-                story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-                story.append(Paragraph(participant_name, styles["CoverSub"]))
-                story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-                story.append(PageBreak())
+        #         # Cover page
+        #         story.append(Spacer(1, 2 * inch))
+        #         story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
+        #         story.append(Paragraph(participant_name, styles["CoverSub"]))
+        #         story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
+        #         story.append(PageBreak())
 
-                # Main content
-                # for section, content in sections_dict.items():
-                #     story.append(Paragraph(section, styles["Heading"]))
-                #     story.append(Paragraph(content, styles["Body"]))
-                #     story.append(Spacer(1, 0.2 * inch))
-                # from reportlab.platypus import Image as RLImage
+        #         # Main content
+        #         # for section, content in sections_dict.items():
+        #         #     story.append(Paragraph(section, styles["Heading"]))
+        #         #     story.append(Paragraph(content, styles["Body"]))
+        #         #     story.append(Spacer(1, 0.2 * inch))
+        #         from reportlab.platypus import Image as RLImage
 
-                from reportlab.platypus import Image as RLImage
+        #         from reportlab.platypus import Image as RLImage
 
-                for section, content in sections_dict.items():
-                    story.append(Paragraph(section, styles["Heading"]))
-                    cleaned_content = clean_markdown(content)
-                    story.append(Paragraph(cleaned_content, styles["Body"]))
+        #         for section, content in sections_dict.items():
+        #             story.append(Paragraph(section, styles["Heading"]))
+        #             cleaned_content = clean_markdown(content)
+        #             story.append(Paragraph(cleaned_content, styles["Body"]))
+                    
+                    
+        # # Optional image logic
+        # if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+        #     story.append(Paragraph("Overall Leadership Score", styles["Body"]))
 
-                    # for section, content in sections_dict.items():
-                    #     story.append(Paragraph(section, styles["Heading"]))
-                    #     cleaned_content = clean_markdown(content)
-                    #     story.append(Paragraph(cleaned_content, styles["Body"]))
+        # if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+        #     story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
 
-                    # Optional image logic (independent checks)
-                    if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-                        story.append(Spacer(1, 0.1 * inch))
-                        story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-                        story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+        # if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+        #     story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
 
-                    if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-                        story.append(Spacer(1, 0.1 * inch))
-                        story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-                        story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+        # story.append(Spacer(1, 0.3 * inch))
+    
 
-                    if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-                        story.append(Spacer(1, 0.1 * inch))
-                        story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-                        story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-                
-                doc.build(story)
-                return output_path
+                    
+                    
+        # # Optional image logic
+        # if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+        #     story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+
+        # if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+        #     story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+
+        # if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+        #     story.append(Spacer(1, 0.1 * inch))
+        #     story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+        #     story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+
+        # story.append(Spacer(1, 0.3 * inch))
+    
 
 
-                # === Generate and Save Bar Chart ===
-                # === Create and Save Hofstede Chart First ===
-                hofstede_keys = [
-                    "High Uncertainty Avoidance PCT",
-                    "High Individualism PCT",
-                    "High Power Distance PCT",
-                    "Long-Term Orientation PCT",
-                    "High Masculinity PCT"
-                ]
 
-                hofstede_scores = [dimension_custom_scores[k] * 100 for k in hofstede_keys]
-                hofstede_labels = [
-                    "Uncertainty Avoidance",
-                    "Individualism",
-                    "Power Distance",
-                    "Long-Term Orientation",
-                    "Masculinity"
-                ]
+        #         doc.build(story)
+        #         return output_path
 
-                fig, ax = plt.subplots(figsize=(10, 5))
-                sns.barplot(x=hofstede_scores, y=hofstede_labels, palette="Blues_d", ax=ax)
-                ax.set_xlim(0, 100)
-                ax.set_title("Cultural Dimensions Profile (Hofstede)")
-                ax.set_xlabel("Score")
-                ax.set_ylabel("")
-                sns.despine()
 
-                hofstede_path = f"hofstede_chart_{clean_name}_{timestamp}.png"
-                fig.tight_layout()
-                fig.savefig(hofstede_path, dpi=150)
-                plt.close(fig)
+            # === Generate and Save Bar Chart ===
+            # === Create and Save Hofstede Chart First ===
+            hofstede_keys = [
+                "High Uncertainty Avoidance PCT",
+                "High Individualism PCT",
+                "High Power Distance PCT",
+                "Long-Term Orientation PCT",
+                "High Masculinity PCT"
+            ]
 
-                import matplotlib.pyplot as plt
-                import seaborn as sns
+            hofstede_scores = [dimension_custom_scores[k] * 100 for k in hofstede_keys]
+            hofstede_labels = [
+                "Uncertainty Avoidance",
+                "Individualism",
+                "Power Distance",
+                "Long-Term Orientation",
+                "Masculinity"
+            ]
 
-                # Bar chart for leadership dimensions (Innovation vs Operations)
-                dimensions = [
-                    "Communication PCT", "Vision PCT", "Authenticity PCT", "Empowerment PCT", "Creativity PCT",
-                    "Stewardship PCT", "Competence PCT", "Confidence PCT", "Reinforcement PCT", "Culture PCT"
-                ]
+            fig, ax = plt.subplots(figsize=(10, 5))
+            sns.barplot(x=hofstede_scores, y=hofstede_labels, palette="Blues_d", ax=ax)
+            ax.set_xlim(0, 100)
+            ax.set_title("Cultural Dimensions Profile (Hofstede)")
+            ax.set_xlabel("Score")
+            ax.set_ylabel("")
+            sns.despine()
 
-                scores = [
-                    dimension_custom_scores[dim] * 100 for dim in dimensions
-                ]
+            hofstede_path = f"hofstede_chart_{clean_name}_{timestamp}.png"
+            fig.tight_layout()
+            fig.savefig(hofstede_path, dpi=150)
+            plt.close(fig)
 
-                labels = [
-                    "Communication", "Vision", "Authenticity", "Empowerment", "Creativity",
-                    "Stewardship", "Competence", "Confidence", "Reinforcement", "Culture"
-                ]
+            import matplotlib.pyplot as plt
+            import seaborn as sns
 
-                category = ["Innovation"] * 5 + ["Operations"] * 5
-                palette = sns.color_palette("Set2", 2)
+            # Bar chart for leadership dimensions (Innovation vs Operations)
+            dimensions = [
+                "Communication PCT", "Vision PCT", "Authenticity PCT", "Empowerment PCT", "Creativity PCT",
+                "Stewardship PCT", "Competence PCT", "Confidence PCT", "Reinforcement PCT", "Culture PCT"
+            ]
 
-                fig, ax = plt.subplots(figsize=(10, 5))
-                sns.barplot(x=scores, y=labels, hue=category, dodge=False, palette=palette, ax=ax)
-                ax.set_title("Leadership Dimension Scores")
-                ax.set_xlim(0, 100)
-                ax.set_xlabel("Score")
-                ax.set_ylabel("")
-                sns.despine()
+            scores = [
+                dimension_custom_scores[dim] * 100 for dim in dimensions
+            ]
 
-                bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
-                fig.tight_layout()
-                fig.savefig(bar_chart_path, dpi=150)
-                plt.close(fig)
+            labels = [
+                "Communication", "Vision", "Authenticity", "Empowerment", "Creativity",
+                "Stewardship", "Competence", "Confidence", "Reinforcement", "Culture"
+            ]
+
+            category = ["Innovation"] * 5 + ["Operations"] * 5
+            palette = sns.color_palette("Set2", 2)
+
+            fig, ax = plt.subplots(figsize=(10, 5))
+            sns.barplot(x=scores, y=labels, hue=category, dodge=False, palette=palette, ax=ax)
+            ax.set_title("Leadership Dimension Scores")
+            ax.set_xlim(0, 100)
+            ax.set_xlabel("Score")
+            ax.set_ylabel("")
+            sns.despine()
+
+            bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
+            fig.tight_layout()
+            fig.savefig(bar_chart_path, dpi=150)
+            plt.close(fig)
 
             # === Next Page Preparation ===
             # Remove inline chart display, only save chart
