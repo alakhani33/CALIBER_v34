@@ -64,9 +64,9 @@ def generate_caliber_report_with_cover(
         story.append(Paragraph(cleaned_content, styles["Body"]))
         
         # Optional image logic
-        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+        if "Overall Leadership Score" in section and os.path.exists(plot_path1):
             story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(RLImage(plot_path1, width=6.5*inch, height=1.8*inch))
             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
         
         elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
@@ -193,9 +193,9 @@ def generate_caliber_report_with_cover(
         story.append(Paragraph(cleaned_content, styles["Body"]))
         
         # Optional image logic
-        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+        if "Overall Leadership Score" in section and os.path.exists(plot_path1):
             story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(RLImage(plot_path1, width=6.5*inch, height=1.8*inch))
             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
         
         elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
@@ -212,9 +212,9 @@ def generate_caliber_report_with_cover(
 
         
         # Optional image logic
-        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+        if "Overall Leadership Score" in section and os.path.exists(plot_path1):
             story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(RLImage(plot_path1, width=6.5*inch, height=1.8*inch))
             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
         
         elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
@@ -668,8 +668,8 @@ if st.session_state.page == max_page:
                 plt.close(fig)
 
             # Save and show plot
-            plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
-            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
+            plot_path1  = f"leadership_score_{clean_name}_{timestamp}.png"
+            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path1 )
 
             # st.image(plot_filename, caption="Your Overall Leadership Score", use_column_width=True)
 
@@ -736,7 +736,7 @@ if st.session_state.page == max_page:
             # Insert the images
 
             # Define image paths
-            plot_path = f"leadership_score_{clean_name}_{timestamp}.png"
+            plot_path1 = f"leadership_score_{clean_name}_{timestamp}.png"
             bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
             import matplotlib.pyplot as plt
             import seaborn as sns
@@ -788,9 +788,9 @@ if st.session_state.page == max_page:
                     story.append(Paragraph(cleaned_content, styles["Body"]))
                     
                     # Optional image logic
-                    if "Overall Leadership Score" in section and os.path.exists(plot_path):
+                    if "Overall Leadership Score" in section and os.path.exists(plot_path1):
                         story.append(Spacer(1, 0.1 * inch))
-                        story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+                        story.append(RLImage(plot_path1, width=6.5*inch, height=1.8*inch))
                         story.append(Paragraph("Overall Leadership Score", styles["Body"]))
                     
                     elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
@@ -807,9 +807,9 @@ if st.session_state.page == max_page:
 
                     
                     # Optional image logic
-                    if "Overall Leadership Score" in section and os.path.exists(plot_path):
+                    if "Overall Leadership Score" in section and os.path.exists(plot_path1):
                         story.append(Spacer(1, 0.1 * inch))
-                        story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+                        story.append(RLImage(plot_path1, width=6.5*inch, height=1.8*inch))
                         story.append(Paragraph("Overall Leadership Score", styles["Body"]))
                     
                     elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
