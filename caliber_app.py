@@ -828,21 +828,6 @@ if st.session_state.page == max_page:
             report_date = datetime.now().strftime("%B %d, %Y")
             pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
 
-            section_dict = {
-                "Executive Summary": result,
-                "Interpretation of Innovation & Operations Dimensions": page2_result,
-                "Cultural Context and Implications": culture_result,
-                "Actionable Development Recommendations": coach_result,
-                "Invitation to 360-Degree CALIBER Assessment": invite_result
-            }
-
-            generate_caliber_report_with_cover(
-                output_path=pdf_filename,
-                participant_name=participant_name,
-                report_date=report_date,
-                sections_dict=section_dict
-            )
-
             # Define second expert agent for interpretation
             # from crewai import Agent, Task
 
@@ -904,6 +889,23 @@ if st.session_state.page == max_page:
             invite_result = llm.predict(invite_prompt)
 
             pdf.chapter_body(sanitize_text(invite_result))
+
+
+            section_dict = {
+                "Executive Summary": result,
+                "Interpretation of Innovation & Operations Dimensions": page2_result,
+                "Cultural Context and Implications": culture_result,
+                "Actionable Development Recommendations": coach_result,
+                "Invitation to 360-Degree CALIBER Assessment": invite_result
+            }
+
+            generate_caliber_report_with_cover(
+                output_path=pdf_filename,
+                participant_name=participant_name,
+                report_date=report_date,
+                sections_dict=section_dict
+            )
+
 
             pdf.output(pdf_filename)
 
