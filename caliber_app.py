@@ -842,12 +842,12 @@ if st.session_state.page == max_page:
             """
             page2_result = llm.predict(page2_prompt)
 
-            pdf.chapter_title("Interpretation of Innovation & Operations Dimensions")
-            pdf.chapter_body(sanitize_text(page2_result))
-            # pdf.add_image(bar_chart_path, "Leadership Dimension Breakdown")
-            # Page 3 – National Culture Analysis
-            pdf.add_page()
-            pdf.chapter_title("Cultural Context and Implications")
+            # pdf.chapter_title("Interpretation of Innovation & Operations Dimensions")
+            # pdf.chapter_body(sanitize_text(page2_result))
+            # # pdf.add_image(bar_chart_path, "Leadership Dimension Breakdown")
+            # # Page 3 – National Culture Analysis
+            # pdf.add_page()
+            # pdf.chapter_title("Cultural Context and Implications")
             
             culture_prompt = f"""
             Provide a concise analysis of how being born in {birth_country} but currently working in {country_work} might shape leadership expectations.
@@ -857,12 +857,12 @@ if st.session_state.page == max_page:
             """
             culture_result = llm.predict(culture_prompt)
 
-            pdf.chapter_body(sanitize_text(culture_result))
-            pdf.add_image(hofstede_path, "Cultural Dimensions Profile (Hofstede)")
+            # pdf.chapter_body(sanitize_text(culture_result))
+            # pdf.add_image(hofstede_path, "Cultural Dimensions Profile (Hofstede)")
 
-            # Page 4 – Actionable Recommendations
-            pdf.add_page()
-            pdf.chapter_title("Actionable Development Recommendations")
+            # # Page 4 – Actionable Recommendations
+            # pdf.add_page()
+            # pdf.chapter_title("Actionable Development Recommendations")
             
             coach_prompt = f"""
             Write a structured and accessible development plan for {participant_name}.
@@ -874,11 +874,11 @@ if st.session_state.page == max_page:
             """
             coach_result = llm.predict(coach_prompt)
 
-            pdf.chapter_body(sanitize_text(coach_result))
+            # pdf.chapter_body(sanitize_text(coach_result))
 
-            # Page 5 – Invitation to 360-Degree CALIBER Assessment
-            pdf.add_page()
-            pdf.chapter_title("Invitation to 360-Degree CALIBER Assessment")
+            # # Page 5 – Invitation to 360-Degree CALIBER Assessment
+            # pdf.add_page()
+            # pdf.chapter_title("Invitation to 360-Degree CALIBER Assessment")
             
             invite_prompt = """
             Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
@@ -888,7 +888,7 @@ if st.session_state.page == max_page:
             """
             invite_result = llm.predict(invite_prompt)
 
-            pdf.chapter_body(sanitize_text(invite_result))
+            # pdf.chapter_body(sanitize_text(invite_result))
 
 
             section_dict = {
@@ -907,7 +907,7 @@ if st.session_state.page == max_page:
             )
 
 
-            pdf.output(pdf_filename)
+            # pdf.output(pdf_filename)
 
             # Display in Streamlit
             with open(pdf_filename, "rb") as f:
