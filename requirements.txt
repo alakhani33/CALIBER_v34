@@ -13,4 +13,5 @@ google-auth
 google-auth-httplib2
 google-auth-oauthlib
 streamlit
+langchain_google_genai
 

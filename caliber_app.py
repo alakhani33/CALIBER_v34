@@ -127,8 +127,8 @@ from langchain.chains import RetrievalQA
 from langchain.tools import Tool
 from langchain.agents import initialize_agent, load_tools
 from langchain_google_genai import ChatGoogleGenerativeAI
-import gradio as gr
-import requests
+# import gradio as gr
+# import requests
 import json
 
 # Set the model name for our LLMs
