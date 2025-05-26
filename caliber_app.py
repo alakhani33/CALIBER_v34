@@ -51,11 +51,36 @@ def generate_caliber_report_with_cover(
     story.append(PageBreak())
 
     # Main content
+    # for section, content in sections_dict.items():
+    #     story.append(Paragraph(section, styles["Heading"]))
+    #     cleaned_content = clean_markdown(content)
+    #     story.append(Paragraph(cleaned_content, styles["Body"]))
+    #     story.append(Spacer(1, 0.2 * inch))
+    from reportlab.platypus import Image as RLImage
+
     for section, content in sections_dict.items():
         story.append(Paragraph(section, styles["Heading"]))
         cleaned_content = clean_markdown(content)
         story.append(Paragraph(cleaned_content, styles["Body"]))
-        story.append(Spacer(1, 0.2 * inch))
+        
+        # Optional image logic
+        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+        
+        elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+        
+        elif "Cultural Context" in section and os.path.exists(hofstede_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+        
+        story.append(Spacer(1, 0.3 * inch))
+
 
     doc.build(story)
     return output_path
@@ -154,11 +179,56 @@ def generate_caliber_report_with_cover(
     #     story.append(Paragraph(section, styles["Heading"]))
     #     story.append(Paragraph(content, styles["Body"]))
     #     story.append(Spacer(1, 0.2 * inch))
+    from reportlab.platypus import Image as RLImage
+
+    # for section, content in sections_dict.items():
+    #     story.append(Paragraph(section, styles["Heading"]))
+    #     cleaned_content = clean_markdown(content)
+    #     story.append(Paragraph(cleaned_content, styles["Body"]))
+    from reportlab.platypus import Image as RLImage
+
     for section, content in sections_dict.items():
         story.append(Paragraph(section, styles["Heading"]))
         cleaned_content = clean_markdown(content)
         story.append(Paragraph(cleaned_content, styles["Body"]))
-        story.append(Spacer(1, 0.2 * inch))
+        
+        # Optional image logic
+        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+        
+        elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+        
+        elif "Cultural Context" in section and os.path.exists(hofstede_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+        
+        story.append(Spacer(1, 0.3 * inch))
+
+        
+        # Optional image logic
+        if "Overall Leadership Score" in section and os.path.exists(plot_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+            story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+        
+        elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+        
+        elif "Cultural Context" in section and os.path.exists(hofstede_path):
+            story.append(Spacer(1, 0.1 * inch))
+            story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+            story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+        
+        story.append(Spacer(1, 0.3 * inch))
+
 
 
     doc.build(story)
@@ -708,11 +778,52 @@ if st.session_state.page == max_page:
                 #     story.append(Paragraph(section, styles["Heading"]))
                 #     story.append(Paragraph(content, styles["Body"]))
                 #     story.append(Spacer(1, 0.2 * inch))
+                from reportlab.platypus import Image as RLImage
+
+                from reportlab.platypus import Image as RLImage
+
                 for section, content in sections_dict.items():
                     story.append(Paragraph(section, styles["Heading"]))
                     cleaned_content = clean_markdown(content)
                     story.append(Paragraph(cleaned_content, styles["Body"]))
-                    story.append(Spacer(1, 0.2 * inch))
+                    
+                    # Optional image logic
+                    if "Overall Leadership Score" in section and os.path.exists(plot_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+                        story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+                    
+                    elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+                    
+                    elif "Cultural Context" in section and os.path.exists(hofstede_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+                    
+                    story.append(Spacer(1, 0.3 * inch))
+
+                    
+                    # Optional image logic
+                    if "Overall Leadership Score" in section and os.path.exists(plot_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
+                        story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+                    
+                    elif "Interpretation of Innovation" in section and os.path.exists(bar_chart_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+                    
+                    elif "Cultural Context" in section and os.path.exists(hofstede_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+                    
+                    story.append(Spacer(1, 0.3 * inch))
+
 
 
                 doc.build(story)
