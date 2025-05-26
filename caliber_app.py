@@ -149,11 +149,17 @@ def generate_caliber_report_with_cover(
     story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
     story.append(PageBreak())
 
-    # Main content
+    # # Main content
+    # for section, content in sections_dict.items():
+    #     story.append(Paragraph(section, styles["Heading"]))
+    #     story.append(Paragraph(content, styles["Body"]))
+    #     story.append(Spacer(1, 0.2 * inch))
     for section, content in sections_dict.items():
         story.append(Paragraph(section, styles["Heading"]))
-        story.append(Paragraph(content, styles["Body"]))
+        cleaned_content = clean_markdown(content)
+        story.append(Paragraph(cleaned_content, styles["Body"]))
         story.append(Spacer(1, 0.2 * inch))
+
 
     doc.build(story)
     return output_path
@@ -698,10 +704,16 @@ if st.session_state.page == max_page:
                 story.append(PageBreak())
 
                 # Main content
+                # for section, content in sections_dict.items():
+                #     story.append(Paragraph(section, styles["Heading"]))
+                #     story.append(Paragraph(content, styles["Body"]))
+                #     story.append(Spacer(1, 0.2 * inch))
                 for section, content in sections_dict.items():
                     story.append(Paragraph(section, styles["Heading"]))
-                    story.append(Paragraph(content, styles["Body"]))
+                    cleaned_content = clean_markdown(content)
+                    story.append(Paragraph(cleaned_content, styles["Body"]))
                     story.append(Spacer(1, 0.2 * inch))
+
 
                 doc.build(story)
                 return output_path
