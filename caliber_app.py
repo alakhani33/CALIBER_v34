@@ -12,6 +12,37 @@ from utils_orig import get_openai_api_key
 from fpdf import FPDF
 import streamlit as st
 
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+
+def upload_to_drive(file_path, file_name, mime_type, folder_id):
+    credentials = service_account.Credentials.from_service_account_file(
+        "drive_service_account.json",
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
+    service = build("drive", "v3", credentials=credentials)
+    
+    file_metadata = {
+        "name": file_name,
+        "parents": ["1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"]
+    }
+    media = MediaFileUpload(file_path, mimetype=mime_type)
+    
+    uploaded_file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id"
+    ).execute()
+    
+    return uploaded_file.get("id")
+
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gdrive"],
+    scopes=["https://www.googleapis.com/auth/drive"]
+)
 
 def sanitize_text(text):
     return (
@@ -664,6 +695,14 @@ if st.session_state.page == max_page:
                     mime="application/pdf"
                 )
 
+            csv_drive_id = upload_to_drive(filename, filename, "text/csv", "your-folder-id")
+            pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", "your-folder-id")
+
+            st.success("✅ Uploaded to Google Drive!")
+            st.write(f"CSV File ID: {csv_drive_id}")
+            st.write(f"PDF File ID: {pdf_drive_id}")
+
+            
             # Show text result
             
             # st.markdown("**Note:** This is only the first page of your CALIBER Leadership Inventory report. It includes an overview of your leadership category, national cultural context, and key development themes. Be sure to review the full report for in-depth scores, your national culture profile, and specific actions and recommendations tailored to you.")
