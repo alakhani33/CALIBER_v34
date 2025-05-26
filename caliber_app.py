@@ -770,57 +770,78 @@ if st.session_state.page == max_page:
             # except Exception as e:
             #     st.warning(f"Could not load image: {e}")
             # Generate PDF with summary and images
-            from fpdf import FPDF
+            # from fpdf import FPDF
 
 
-            def sanitize_text(text):
-                return (
-                    text.replace("–", "-")
-                        .replace("—", "-")
-                        .replace("’", "'")
-                        .replace("“", '"')
-                        .replace("”", '"')
-                        .replace("…", "...")
-                        .replace("•", "-")
-                )
+            # def sanitize_text(text):
+            #     return (
+            #         text.replace("–", "-")
+            #             .replace("—", "-")
+            #             .replace("’", "'")
+            #             .replace("“", '"')
+            #             .replace("”", '"')
+            #             .replace("…", "...")
+            #             .replace("•", "-")
+            #     )
 
 
+            # pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
+            # class PDFReport(FPDF):
+            #     def footer(self):
+            #         self.set_y(-10)
+            #         self.set_font("Arial", "I", 8)
+            #         self.set_text_color(128)
+            #         self.cell(0, 10, "© 2025 M.A. Lakhani. All rights reserved.", 0, 0, "C")
+            #     def header(self):
+            #         self.set_font("Arial", "B", 12)
+            #         self.cell(0, 10, "CALIBER Leadership Inventory Summary", ln=True, align="C")
+            #         self.ln(5)
+
+            #     def chapter_title(self, title):
+            #         self.set_font("Arial", "B", 11)
+            #         self.cell(0, 10, title, ln=True, align="L")
+            #         self.ln(4)
+
+            #     def chapter_body(self, body):
+            #         self.set_font("Arial", "", 10)
+            #         self.multi_cell(0, 5, body)
+            #         self.ln()
+
+            #     def add_image(self, path, caption):
+            #         self.image(path, w=180)
+            #         self.set_font("Arial", "I", 9)
+            #         self.cell(0, 5, caption, ln=True, align="C")
+            #         self.ln(5)
+
+            # pdf = PDFReport()
+            # pdf.add_page()
+            # pdf.chapter_body(sanitize_text(result))
+            # pdf.add_image(plot_path, "Overall Leadership Score")
+            # # Page 2 – Leadership Dimension Breakdown
+            # pdf.add_page()
+            # pdf.chapter_title("Leadership Dimension Breakdown")
+            # pdf.add_image(bar_chart_path, "Dimension Breakdown (Innovation vs Operations)")
+
+
+            from datetime import datetime
+
+            report_date = datetime.now().strftime("%B %d, %Y")
             pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
-            class PDFReport(FPDF):
-                def footer(self):
-                    self.set_y(-10)
-                    self.set_font("Arial", "I", 8)
-                    self.set_text_color(128)
-                    self.cell(0, 10, "© 2025 M.A. Lakhani. All rights reserved.", 0, 0, "C")
-                def header(self):
-                    self.set_font("Arial", "B", 12)
-                    self.cell(0, 10, "CALIBER Leadership Inventory Summary", ln=True, align="C")
-                    self.ln(5)
 
-                def chapter_title(self, title):
-                    self.set_font("Arial", "B", 11)
-                    self.cell(0, 10, title, ln=True, align="L")
-                    self.ln(4)
+            section_dict = {
+                "Executive Summary": result,
+                "Interpretation of Innovation & Operations Dimensions": page2_result,
+                "Cultural Context and Implications": culture_result,
+                "Actionable Development Recommendations": coach_result,
+                "Invitation to 360-Degree CALIBER Assessment": invite_result
+            }
 
-                def chapter_body(self, body):
-                    self.set_font("Arial", "", 10)
-                    self.multi_cell(0, 5, body)
-                    self.ln()
-
-                def add_image(self, path, caption):
-                    self.image(path, w=180)
-                    self.set_font("Arial", "I", 9)
-                    self.cell(0, 5, caption, ln=True, align="C")
-                    self.ln(5)
-
-            pdf = PDFReport()
-            pdf.add_page()
-            pdf.chapter_body(sanitize_text(result))
-            pdf.add_image(plot_path, "Overall Leadership Score")
-            # Page 2 – Leadership Dimension Breakdown
-            pdf.add_page()
-            pdf.chapter_title("Leadership Dimension Breakdown")
-            pdf.add_image(bar_chart_path, "Dimension Breakdown (Innovation vs Operations)")
+            generate_caliber_report_with_cover(
+                output_path=pdf_filename,
+                participant_name=participant_name,
+                report_date=report_date,
+                sections_dict=section_dict
+            )
 
             # Define second expert agent for interpretation
             # from crewai import Agent, Task
