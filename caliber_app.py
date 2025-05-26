@@ -16,6 +16,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
+folder_id = "1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"
+
 def upload_to_drive(file_path, file_name, mime_type, folder_id):
     credentials = service_account.Credentials.from_service_account_file(
         "drive_service_account.json",
@@ -25,7 +27,7 @@ def upload_to_drive(file_path, file_name, mime_type, folder_id):
     
     file_metadata = {
         "name": file_name,
-        "parents": ["1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"]
+        "parents": [folder_id]
     }
     media = MediaFileUpload(file_path, mimetype=mime_type)
     
@@ -695,8 +697,14 @@ if st.session_state.page == max_page:
                     mime="application/pdf"
                 )
 
-            csv_drive_id = upload_to_drive(filename, filename, "text/csv", "your-folder-id")
+            csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
             pdf_drive_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", "your-folder-id")
+
+            pdf_id = upload_to_drive(pdf_filename, pdf_filename, "application/pdf", folder_id)
+            if pdf_id:
+                st.success("✅ PDF uploaded to Drive!")
+            else:
+                st.error("❌ PDF upload failed.")
 
             st.success("✅ Uploaded to Google Drive!")
             st.write(f"CSV File ID: {csv_drive_id}")
