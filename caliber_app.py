@@ -688,75 +688,14 @@ if st.session_state.page == max_page:
                 level = "Performing Leader"
 
 
-            # Create and save leadership score plot
-            def create_leadership_plot(score, save_path):
-                fig, ax = plt.subplots(figsize=(10, 2))
-
-                # Background color zones
-                ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5, label='Aspiring Leader')
-                ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5, label='Developing Leader')
-                ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5, label='Performing Leader')
-
-                # Score line
-                ax.axvline(score, color='black', linewidth=3, label='Your Score')
-
-                # Region Labels
-                ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
-                ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
-                ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
-
-                ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
-                ax.set_xlim(0, 100)
-                ax.set_yticks([])
-                ax.set_xlabel('Score')
-                sns.despine(left=True, bottom=True)
-                plt.tight_layout()
-
-                fig.savefig(save_path, dpi=150)
-                plt.close(fig)
-
-            # Save and show plot
-            plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
-            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
-
-
+            
             # Collect contextual inputs
             participant_role = st.session_state.get("job_function", "a professional")
             participant_industry = st.session_state.get("industry", "their industry")
             country_work = st.session_state.get("country_work", "their country of work")
             birth_country = st.session_state.get("birth_country", "their country of origin")
 
-            # Define the expert agent
-
-            # Define the interpretation task
-            summary_description = ("""
-            Please note: This is the first page of the CALIBER Leadership Inventory report. In addition to this expert analysis, the full report includes detailed scores, a national culture profile, and specific actions and development recommendations. Encourage the participant to carefully review the complete document.
-
-            """ + 
-                f"Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}. "
-                f"They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory. "
-                f"Label their leadership category as '{level}'. Reflect on the implications of this level of leadership capability "
-                f"on team performance and organizational culture within the context of {participant_industry}. Use positive, constructive tone. "
-                f"Also take into account that the participant currently works in {country_work} but was born in {birth_country}. "
-                f"Comment on how cultural dimensions might influence their leadership style and how cultural awareness can enhance their effectiveness. "
-                "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
-            )
-
-            # Run the crew
-
             
-            summary_prompt = f"""
-            Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}.
-            They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory.
-            Label their leadership category as '{level}'.
-            Reflect on implications for team performance and culture within the context of {participant_industry}.
-            Include how being born in {birth_country} and working in {country_work} affects leadership style.
-            Align analysis with Hofstede cultural dimensions: {', '.join(closest_cultures)}.
-            Use the official CALIBER tone: positive, structured, and actionable.
-            """
-            result = llm.predict(summary_prompt)
-
-
             # Show and offer download for report
             # st.subheader("📝 Leadership Expert Report")
 
@@ -936,6 +875,37 @@ if st.session_state.page == max_page:
             fig.savefig(bar_chart_path, dpi=150)
             plt.close(fig)
 
+            # Create and save leadership score plot
+            def create_leadership_plot(score, save_path):
+                fig, ax = plt.subplots(figsize=(10, 2))
+
+                # Background color zones
+                ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5, label='Aspiring Leader')
+                ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5, label='Developing Leader')
+                ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5, label='Performing Leader')
+
+                # Score line
+                ax.axvline(score, color='black', linewidth=3, label='Your Score')
+
+                # Region Labels
+                ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
+                ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
+                ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
+
+                ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
+                ax.set_xlim(0, 100)
+                ax.set_yticks([])
+                ax.set_xlabel('Score')
+                sns.despine(left=True, bottom=True)
+                plt.tight_layout()
+
+                fig.savefig(save_path, dpi=150)
+                plt.close(fig)
+
+            # Save and show plot
+            plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
+            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
+
             # === Next Page Preparation ===
             # Remove inline chart display, only save chart
             # try:
@@ -1004,6 +974,39 @@ if st.session_state.page == max_page:
 
             # Define second expert agent for interpretation
             # from crewai import Agent, Task
+
+            # Define the expert agent
+
+            # Define the interpretation task
+            summary_description = ("""
+            Please note: This is the first page of the CALIBER Leadership Inventory report. In addition to this expert analysis, the full report includes detailed scores, a national culture profile, and specific actions and development recommendations. Encourage the participant to carefully review the complete document.
+
+            """ + 
+                f"Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}. "
+                f"They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory. "
+                f"Label their leadership category as '{level}'. Reflect on the implications of this level of leadership capability "
+                f"on team performance and organizational culture within the context of {participant_industry}. Use positive, constructive tone. "
+                f"Also take into account that the participant currently works in {country_work} but was born in {birth_country}. "
+                f"Comment on how cultural dimensions might influence their leadership style and how cultural awareness can enhance their effectiveness. "
+                "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
+            )
+
+            # Run the crew
+
+            
+            summary_prompt = f"""
+            Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}.
+            They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory.
+            Label their leadership category as '{level}'.
+            Reflect on implications for team performance and culture within the context of {participant_industry}.
+            Include how being born in {birth_country} and working in {country_work} affects leadership style.
+            Align analysis with Hofstede cultural dimensions: {', '.join(closest_cultures)}.
+            Use the official CALIBER tone: positive, structured, and actionable.
+            """
+            # result = llm.predict(summary_prompt)
+            result = llm.predict(summary_description)
+
+
 
             # Compose interpretation task for dimensions
 
