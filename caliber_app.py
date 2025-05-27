@@ -678,7 +678,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
             - **Innovation** covers Communication, Vision, Authenticity, Empowerment, and Creativity.
             - **Operations** includes Stewardship, Competence, Confidence, Reinforcement, and Culture.
 
-            Write two clear paragraphs — one for Innovation and one for Operations — highlighting standout scores and opportunities. Offer concrete suggestions for improvement and tie each insight to potential team or organizational impact. Use a confident, encouraging tone and address {participant_name} directly.  Keep it all under 500 words.
+            Write two clear paragraphs — one for Innovation and one for Operations — highlighting standout scores and opportunities. Offer concrete suggestions for improvement and tie each insight to potential team or organizational impact. Use a confident, encouraging tone and address {participant_name} directly.  Keep this entire section under 500 words.
             """
 
 
@@ -714,7 +714,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
             - Highlight where {participant_name}'s cultural values may align or conflict with workplace expectations.
             - Offer constructive guidance on how {participant_name} can adapt to thrive across cultural settings.
 
-            Write in the second person (e.g., “You may find...”) and maintain CALIBER's supportive and thoughtful tone.  Keep it all under 500 words.
+            Write in the second person (e.g., “You may find...”) and maintain CALIBER's supportive and thoughtful tone.  Keep this entire section under 500 words.
             """
 
 
@@ -770,7 +770,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
 # Conclude with a warm, professional invitation to learn more by contacting admin@caliberleadership.com. Maintain the CALIBER style: clear, concise, and insight-driven.
 # """
             invite_prompt = """
-            Introduce the CALIBER 360-Degree Leadership Inventory in a clear, engaging tone.  Keep this section under 500 words.
+            Introduce the CALIBER 360-Degree Leadership Inventory in a clear, engaging tone.  Keep this whole section under 500 words.
 
             - Explain its purpose: gathering feedback from peers, reports, and supervisors.
             - Highlight benefits: increased self-awareness, cultural alignment, bias reduction, and progress tracking.
@@ -827,7 +827,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
                     story.append(Paragraph(section, styles["Heading"]))
                     cleaned_content = clean_markdown(content)
                     story.append(Paragraph(cleaned_content, styles["Body"]))
-                    story.append(PageBreak())
+                    
                     
                     # Optional image logic
                     # if "Overall Leadership Score" in section and sumplot_path and os.path.exists(sumplot_path):
@@ -835,17 +835,17 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
                         story.append(Spacer(1, 0.1 * inch))
                         story.append(RLImage(sumplot_path, width=6.5*inch, height=1.8*inch))
                         story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
+                        story.append(PageBreak())
                     if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
                         story.append(Spacer(1, 0.1 * inch))
                         story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
                         story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
+                        story.append(PageBreak())
                     if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
                         story.append(Spacer(1, 0.1 * inch))
                         story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
                         story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
+                        story.append(PageBreak())
                     story.append(Spacer(1, 0.3 * inch))
 
                 doc.build(story)
