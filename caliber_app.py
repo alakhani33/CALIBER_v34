@@ -144,11 +144,11 @@ def sanitize_text(text):
     )
 
 
-# llm = ChatOpenAI(
-#     model='gpt-3.5-turbo',
-#     temperature=0,
-#     openai_api_key=st.secrets["openai_api_key"]
-# )
+llm = ChatOpenAI(
+    model='gpt-3.5-turbo',
+    temperature=0,
+    openai_api_key=st.secrets["openai_api_key"]
+)
 
 from langchain.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -166,7 +166,7 @@ GEMINI_MODEL = "gemini-1.5-flash"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # ✅ Initialize the model
-llm = ChatGoogleGenerativeAI(google_api_key=GEMINI_API_KEY, model=GEMINI_MODEL, temperature=0.3)
+# llm = ChatGoogleGenerativeAI(google_api_key=GEMINI_API_KEY, model=GEMINI_MODEL, temperature=0.3)
 
 
 st.set_page_config(page_title="CALIBER Leadership Inventory©", layout="centered")
