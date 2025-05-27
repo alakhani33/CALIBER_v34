@@ -30,12 +30,7 @@ def clean_markdown(text):
 #     text = re.sub(r'<span style="[^"]*">', '', text)  # remove span styles
 #     text = text.replace('</span>', '')  # remove closing span
 #     return text
-def add_footer(canvas, doc):
-    footer_text = "© 2025 Dr. Ali Lakhani | CALIBER Leadership Inventory"
-    canvas.saveState()
-    canvas.setFont('Helvetica', 8)
-    canvas.drawCentredString(4.25 * inch, 0.5 * inch, footer_text)
-    canvas.restoreState()
+
 
 from utils_orig import get_openai_api_key
 from fpdf import FPDF
@@ -853,9 +848,6 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
                         # story.append(PageBreak())
                     story.append(Spacer(1, 0.3 * inch))
 
-                template = PageTemplate(id='footer_template', frames=frame, onPage=add_footer)
-                doc.addPageTemplates([template])
-                
                 doc.build(story)
                 return output_path
 
