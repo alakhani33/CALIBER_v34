@@ -578,9 +578,9 @@ if st.session_state.page == max_page:
             # )
 
             summary_description = f"""
-You are generating an executive summary for a professional leadership report. DO NOT include fictional elements like the current date or salutations. DO NOT include the participant's name in a heading. 
+You are generating a personalized executive summary for a professional leadership report. DO NOT include fictional elements like the current date or salutations. DO NOT include the participant's name in a heading. 
 
-Write a clear, well-organized executive summary (maximum 300 words) based on the following inputs:
+Write a clear, well-organized executive summary (maximum 400 words) based on the following inputs:
 
 - Participant Name: {participant_name}
 - Industry: {participant_industry}
@@ -589,16 +589,16 @@ Write a clear, well-organized executive summary (maximum 300 words) based on the
 - Leadership Category: {level}
 - Country of Work: {country_work}
 - Country of Birth: {birth_country}
-- Closest Cultures: {', '.join(closest_cultures)}
+
 
 Instructions:
-1. Begin with a professional overview of the participant’s leadership score and category.
+1. Begin with a professional overview of the participant’s leadership score and category.  Use a personal tone.
 2. Reflect on what this level of capability means for their team and organizational culture in the context of their industry.
 3. Discuss how their cultural background (birth country vs work country) might influence their leadership style, based on Hofstede’s dimensions.
-4. Avoid headers like “Call to Action” or fake dates. Use a constructive, motivational tone in paragraph format.
+4. Avoid headers like “Call to Action” or fake dates. Use a constructive, motivational, personal tone in paragraph format.
 5. Conclude with an uplifting statement encouraging leadership development.
 
-Keep the entire response concise, insightful, and under 300 words.
+Keep the entire response concise, insightful, and under 400 words.
 """
 
 
