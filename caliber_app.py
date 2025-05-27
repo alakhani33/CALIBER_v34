@@ -215,18 +215,18 @@ if st.session_state.page == 0:
             st.session_state.relationship = relation
 
 
-    known_countries = culture_df['Country'].str.lower().tolist()
-    if st.session_state.country_work.lower() not in known_countries:
-        # st.warning("⚠️ Country of Work not found in our database. Results will use closest match available.")
-        st.session_state.invalid_country_work = True
-    else:
-        st.session_state.invalid_country_work = False
+    # known_countries = culture_df['Country'].str.lower().tolist()
+    # if st.session_state.country_work.lower() not in known_countries:
+    #     # st.warning("⚠️ Country of Work not found in our database. Results will use closest match available.")
+    #     st.session_state.invalid_country_work = True
+    # else:
+    #     st.session_state.invalid_country_work = False
 
-    if st.session_state.birth_country.lower() not in known_countries:
-        # st.warning("⚠️ Country of Birth not found in our database. Results will use closest match available.")
-        st.session_state.invalid_birth_country = True
-    else:
-        st.session_state.invalid_birth_country = False
+    # if st.session_state.birth_country.lower() not in known_countries:
+    #     # st.warning("⚠️ Country of Birth not found in our database. Results will use closest match available.")
+    #     st.session_state.invalid_birth_country = True
+    # else:
+    #     st.session_state.invalid_birth_country = False
 
     occupation_text = st.session_state.get("job_function", "").lower()
     st.session_state.is_retired = any(kw in occupation_text for kw in ["retired", "not working", "unemployed", "none"])
