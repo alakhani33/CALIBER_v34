@@ -198,16 +198,16 @@ max_page = 5
 # Page content
 if st.session_state.page == 0:
     st.subheader("Participant Information")
-    st.session_state.name = st.text_input("Your Name")
-    st.session_state.email = st.text_input("Your Email Address")  # ✅ ADD THIS LINE
-    st.session_state.industry = st.text_input("Industry in which you work")
-    st.session_state.job_function = st.text_input("Your job function")
-    st.session_state.country_work = st.text_input("Country where you currently work")
-    st.session_state.birth_country = st.text_input("Country where you were born")
+    st.session_state.name = st.text_input("Your Name", key="name")
+    st.session_state.email = st.text_input("Your Email Address", key="email")  # ✅ ADD THIS LINE
+    st.session_state.industry = st.text_input("Industry in which you work", key="industry")
+    st.session_state.job_function = st.text_input("Your job function", key="job_function")
+    st.session_state.country_work = st.text_input("Country where you currently work", key="country_work")
+    st.session_state.birth_country = st.text_input("Country where you were born", key="birth_country")
 
     st.session_state.survey_for = st.radio("Who are you taking this survey for:", ["Myself", "Someone Else"])
     if st.session_state.survey_for == "Someone Else":
-        st.session_state.subject_name = st.text_input("Name of the person you are evaluating")
+        st.session_state.subject_name = st.text_input("Name of the person you are evaluating", key="subject_name")
         relation = st.selectbox("Your relationship to that person:", ["The person is my Manager", "The person is my Direct Report", "The person is my Peer", "Other"])
         if relation == "Other":
             st.session_state.relationship = st.text_input("Please describe your relationship")
