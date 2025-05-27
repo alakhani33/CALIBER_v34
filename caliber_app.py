@@ -24,61 +24,6 @@ def clean_markdown(text):
     text = re.sub(r'^\s*[-*]\s+', '• ', text, flags=re.MULTILINE)  # bullets
     return text.replace("\n\n", "<br/><br/>").replace("\n", "<br/>")  # line breaks
 
-def generate_caliber_report_with_cover(
-    output_path,
-    participant_name,
-    report_date,
-    sections_dict,
-    plot_path=None,
-    bar_chart_path=None,
-    hofstede_path=None
-):
-    doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=72, bottomMargin=72)
-
-    styles = getSampleStyleSheet()
-    styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-    styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-    styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-    story = []
-
-    # Cover page
-    story.append(Spacer(1, 2 * inch))
-    story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-    story.append(Paragraph(participant_name, styles["CoverSub"]))
-    story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-    story.append(PageBreak())
-
-    from reportlab.platypus import Image as RLImage
-
-    for section, content in sections_dict.items():
-        story.append(Paragraph(section, styles["Heading"]))
-        cleaned_content = clean_markdown(content)
-        story.append(Paragraph(cleaned_content, styles["Body"]))
-        
-        # Optional image logic
-        if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-            story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
-        if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-            story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
-        if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-            story.append(Spacer(1, 0.1 * inch))
-            story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-            story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
-        story.append(Spacer(1, 0.3 * inch))
-
-    doc.build(story)
-    return output_path
 
 from utils_orig import get_openai_api_key
 from fpdf import FPDF
@@ -587,34 +532,29 @@ if st.session_state.page == max_page:
             fig.savefig(bar_chart_path, dpi=150)
             plt.close(fig)
 
-            # Create and save leadership score plot
-            # def create_leadership_plot(score, save_path):
-            fig, ax = plt.subplots(figsize=(10, 2))
+            def generate_overall_leadership_plot(score_pct, save_path):
+                fig, ax = plt.subplots(figsize=(10, 2))
+                ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5)
+                ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5)
+                ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5)
 
-            # Background color zones
-            ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5, label='Aspiring Leader')
-            ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5, label='Developing Leader')
-            ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5, label='Performing Leader')
+                ax.axvline(score_pct, color='black', linewidth=3)
+                ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
+                ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
+                ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
 
-            # Score line
-            ax.axvline(leadership_custom_scores['Overall Leadership PCT']*100, color='black', linewidth=3, label='Your Score')
+                ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
+                ax.set_xlim(0, 100)
+                ax.set_yticks([])
+                ax.set_xlabel('Score')
+                sns.despine(left=True, bottom=True)
+                plt.tight_layout()
+                fig.savefig(save_path, dpi=150)
+                plt.close(fig)
 
-            # Region Labels
-            ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
-            ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
-            ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
-
-            ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
-            ax.set_xlim(0, 100)
-            ax.set_yticks([])
-            ax.set_xlabel('Score')
-            sns.despine(left=True, bottom=True)
-
-            sumplot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
-            plt.tight_layout()
-            fig.savefig(sumplot_path, dpi=150)
-            plt.close(fig)
-
+            score = leadership_custom_scores['Overall Leadership PCT'] * 100
+            sumplot_path = f"leadership_score_{clean_name}_{timestamp}.png"
+            generate_overall_leadership_plot(score, sumplot_path)
             
             from datetime import datetime
 
@@ -707,6 +647,63 @@ if st.session_state.page == max_page:
                 "Actionable Development Recommendations": coach_result,
                 "Invitation to 360-Degree CALIBER Assessment": invite_result
             }
+
+
+            def generate_caliber_report_with_cover(
+                output_path,
+                participant_name,
+                report_date,
+                sections_dict,
+                plot_path=None,
+                bar_chart_path=None,
+                hofstede_path=None
+            ):
+                doc = SimpleDocTemplate(output_path, pagesize=LETTER,
+                                        rightMargin=72, leftMargin=72,
+                                        topMargin=72, bottomMargin=72)
+
+                styles = getSampleStyleSheet()
+                styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
+                styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
+                styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
+                styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
+
+                story = []
+
+                # Cover page
+                story.append(Spacer(1, 2 * inch))
+                story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
+                story.append(Paragraph(participant_name, styles["CoverSub"]))
+                story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
+                story.append(PageBreak())
+
+                from reportlab.platypus import Image as RLImage
+
+                for section, content in sections_dict.items():
+                    story.append(Paragraph(section, styles["Heading"]))
+                    cleaned_content = clean_markdown(content)
+                    story.append(Paragraph(cleaned_content, styles["Body"]))
+                    
+                    # Optional image logic
+                    if "Overall Leadership Score" in section and sumplot_path and os.path.exists(sumplot_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(sumplot_path, width=6.5*inch, height=1.8*inch))
+                        story.append(Paragraph("Overall Leadership Score", styles["Body"]))
+
+                    if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
+
+                    if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
+                        story.append(Spacer(1, 0.1 * inch))
+                        story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
+                        story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
+
+                    story.append(Spacer(1, 0.3 * inch))
+
+                doc.build(story)
+                return output_path
 
             
             generate_caliber_report_with_cover(
