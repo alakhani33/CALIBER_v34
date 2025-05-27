@@ -106,8 +106,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import json
 
 # Set the model name for our LLMs
-# GEMINI_MODEL = "gemini-1.5-flash"
-GEMINI_MODEL = "models/gemini-pro"
+GEMINI_MODEL = "gemini-1.5-flash"
+# GEMINI_MODEL = "models/gemini-pro"
 # Store the API key in a variable.
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
