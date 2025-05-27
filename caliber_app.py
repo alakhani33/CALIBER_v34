@@ -577,10 +577,33 @@ if st.session_state.page == max_page:
             #     "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
             # )
 
-            summary_description = f"""
-You are generating a personalized executive summary for a professional leadership report. DO NOT include fictional elements like the current date or salutations. DO NOT include the participant's name in a heading. 
+#             summary_description = f"""
+# You are generating a personalized executive summary for a professional leadership report. DO NOT include fictional elements like the current date or salutations. DO NOT include the participant's name in a heading. 
 
-Write a clear, well-organized executive summary (maximum 400 words) based on the following inputs:
+# Write a clear, well-organized executive summary (maximum 400 words) based on the following inputs:
+
+# - Participant Name: {participant_name}
+# - Industry: {participant_industry}
+# - Job Function: {participant_role}
+# - Leadership Score: {score_pct:.1f}/100
+# - Leadership Category: {level}
+# - Country of Work: {country_work}
+# - Country of Birth: {birth_country}
+
+
+# Instructions:
+# 1. Begin with a professional overview of the participant’s leadership score and category.  Use a personal tone.
+# 2. Reflect on what this level of capability means for their team and organizational culture in the context of their industry.
+# 3. Discuss how their cultural background (birth country vs work country) might influence their leadership style, based on Hofstede’s dimensions.
+# 4. Avoid headers like “Call to Action” or fake dates. Use a constructive, motivational, personal tone in paragraph format.
+# 5. Conclude with an uplifting statement encouraging leadership development.
+
+# Keep the entire response concise, insightful, and under 400 words.
+# """
+            summary_description = f"""
+You are generating an executive summary for a professional leadership report. Avoid fake elements like the current date or salutations. DO NOT include a header with the participant’s name or title. Instead, refer to the participant by name naturally within the body of the summary, addressing them in the first person.
+
+Write a clear, well-organized executive summary (under 500 words) based on the following:
 
 - Participant Name: {participant_name}
 - Industry: {participant_industry}
@@ -590,15 +613,14 @@ Write a clear, well-organized executive summary (maximum 400 words) based on the
 - Country of Work: {country_work}
 - Country of Birth: {birth_country}
 
-
 Instructions:
-1. Begin with a professional overview of the participant’s leadership score and category.  Use a personal tone.
-2. Reflect on what this level of capability means for their team and organizational culture in the context of their industry.
-3. Discuss how their cultural background (birth country vs work country) might influence their leadership style, based on Hofstede’s dimensions.
-4. Avoid headers like “Call to Action” or fake dates. Use a constructive, motivational, personal tone in paragraph format.
-5. Conclude with an uplifting statement encouraging leadership development.
+1. Begin by introducing {participant_name} and referencing their leadership score and category.
+2. Reflect on what this level of leadership means for their team and organizational culture in the context of their industry and role.
+3. Discuss how being born in {birth_country} and working in {country_work} may influence {participant_name}'s leadership style, referencing Hofstede’s cultural dimensions.
+4. Use a constructive, professional tone in paragraph form.
+5. End with a motivational call to action encouraging leadership growth.
 
-Keep the entire response concise, insightful, and under 400 words.
+Avoid formal section titles like “Call to Action.” Write in paragraph format and keep it personal, supportive, and inspiring.
 """
 
 
@@ -622,12 +644,27 @@ Keep the entire response concise, insightful, and under 400 words.
             # Compose interpretation task for dimensions
 
             
+            # page2_prompt = f"""
+            # Write a summary interpreting the leadership scores in 10 dimensions.
+            # Separate discussion into Innovation (Communication, Vision, Authenticity, Empowerment, Creativity) and Operations (Stewardship, Competence, Confidence, Reinforcement, Culture).
+            # Explain the significance of each score, leadership potential, and team/organizational impact.
+            # Use CALIBER tone, structure, and style.
+            # """
             page2_prompt = f"""
-            Write a summary interpreting the leadership scores in 10 dimensions.
-            Separate discussion into Innovation (Communication, Vision, Authenticity, Empowerment, Creativity) and Operations (Stewardship, Competence, Confidence, Reinforcement, Culture).
-            Explain the significance of each score, leadership potential, and team/organizational impact.
-            Use CALIBER tone, structure, and style.
-            """
+You are writing a personalized interpretation of the participant’s leadership profile based on their scores across 10 dimensions.
+
+Organize your response in two cohesive sections:
+- **Innovation**: Communication, Vision, Authenticity, Empowerment, Creativity
+- **Operations**: Stewardship, Competence, Confidence, Reinforcement, Culture
+
+For each cluster:
+1. Interpret the participant’s scores, highlighting both strengths and opportunities.
+2. Discuss how these traits may manifest in their leadership behavior, influence team dynamics, and shape organizational outcomes.
+3. Use a warm, insightful, and empowering tone aligned with CALIBER's coaching style.
+
+Avoid listing scores mechanically. Instead, weave them naturally into a narrative that reflects the participant’s potential and leadership journey.
+"""
+
             page2_result = llm.predict(page2_prompt)
 
             # pdf.chapter_title("Interpretation of Innovation & Operations Dimensions")
@@ -637,32 +674,62 @@ Keep the entire response concise, insightful, and under 400 words.
             # pdf.add_page()
             # pdf.chapter_title("Cultural Context and Implications")
             
+            # culture_prompt = f"""
+            # Provide a concise analysis of how being born in {birth_country} but currently working in {country_work} might shape leadership expectations.
+            # Reference Hofstede’s dimensions.
+            # Include potential cultural tensions or synergies and leadership guidance.
+            # Use the official CALIBER tone and structure.
+            # """
             culture_prompt = f"""
-            Provide a concise analysis of how being born in {birth_country} but currently working in {country_work} might shape leadership expectations.
-            Reference Hofstede’s dimensions.
-            Include potential cultural tensions or synergies and leadership guidance.
-            Use the official CALIBER tone and structure.
-            """
+Write a thoughtful reflection on how being born in {birth_country} and currently working in {country_work} may influence the participant’s leadership style.
+
+Reference Hofstede’s cultural dimensions to explore how national values—such as attitudes toward hierarchy, uncertainty, or individualism—might shape expectations and behavior in the workplace.
+
+Highlight potential cultural tensions or synergies the participant may encounter, and offer supportive, actionable guidance for leading effectively across these cultural dynamics.
+
+Maintain a constructive, growth-focused tone consistent with CALIBER’s personalized coaching approach.
+"""
+
             culture_result = llm.predict(culture_prompt)
 
             
+            # coach_prompt = f"""
+            # Write a structured and accessible development plan for {participant_name}.
+            # Suggest 3–5 growth areas across Innovation and Operations dimensions.
+            # Provide short rationale for each.
+            # Comment on Hofstede cultural scores and alignments: {', '.join(closest_cultures)}.
+            # Offer guidance for cross-cultural adaptability and leadership effectiveness.
+            # Use CALIBER tone and format.
+            # """
             coach_prompt = f"""
-            Write a structured and accessible development plan for {participant_name}.
-            Suggest 3–5 growth areas across Innovation and Operations dimensions.
-            Provide short rationale for each.
-            Comment on Hofstede cultural scores and alignments: {', '.join(closest_cultures)}.
-            Offer guidance for cross-cultural adaptability and leadership effectiveness.
-            Use CALIBER tone and format.
-            """
+Develop a personalized leadership growth plan for {participant_name} based on their assessment results.
+
+Identify 3 to 5 focused areas for development, drawing from both Innovation (e.g., Communication, Vision, Creativity) and Operations (e.g., Stewardship, Competence, Culture) dimensions. For each area, provide a brief rationale that highlights its significance for their role and leadership journey.
+
+Incorporate insights from Hofstede’s cultural dimensions, especially as they relate to alignment with cultural profiles like {', '.join(closest_cultures)}. Reflect on how these cultural influences might support or challenge the participant's growth.
+
+Conclude with clear, supportive guidance for cultivating cross-cultural leadership effectiveness. Maintain CALIBER’s tone: personalized, motivational, and forward-looking.
+"""
+
             coach_result = llm.predict(coach_prompt)
 
             
+            # invite_prompt = """
+            # Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
+            # Explain how it exposes biases, highlights cultural fit, tracks progress, and improves self-awareness.
+            # Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
+            # Use CALIBER style.
+            # """
             invite_prompt = """
-            Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
-            Explain how it exposes biases, highlights cultural fit, tracks progress, and improves self-awareness.
-            Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
-            Use CALIBER style.
-            """
+Craft a one-page introduction to the CALIBER 360-Degree Leadership Inventory.
+
+Begin by explaining the purpose of the tool: to offer a holistic perspective on leadership by gathering insights from self and others. Emphasize how the process increases self-awareness, uncovers potential biases, tracks leadership growth over time, and identifies cultural alignment.
+
+Encourage participation from diverse feedback sources—peers, direct reports, and supervisors—to gain a balanced view of leadership strengths and opportunities.
+
+Conclude with a warm, professional invitation to learn more by contacting admin@caliberleadership.com. Maintain the CALIBER style: clear, concise, and insight-driven.
+"""
+
             invite_result = llm.predict(invite_prompt)
 
 
