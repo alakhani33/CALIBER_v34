@@ -564,43 +564,18 @@ if st.session_state.page == max_page:
 
 
             # Define the interpretation task
-            # summary_description = ("""
-            # Please note: This is the first page of the CALIBER Leadership Inventory report. In addition to this expert analysis, the full report includes detailed scores, a national culture profile, and specific actions and development recommendations. Encourage the participant to carefully review the complete document.
+            summary_description = ("""
+            Please note: This is the first page of the CALIBER Leadership Inventory report. In addition to this expert analysis, the full report includes detailed scores, a national culture profile, and specific actions and development recommendations. Encourage the participant to carefully review the complete document.
 
-            # """ + 
-            #     f"Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}. "
-            #     f"They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory. "
-            #     f"Label their leadership category as '{level}'. Reflect on the implications of this level of leadership capability "
-            #     f"on team performance and organizational culture within the context of {participant_industry}. Use positive, constructive tone. "
-            #     f"Also take into account that the participant currently works in {country_work} but was born in {birth_country}. "
-            #     f"Comment on how cultural dimensions might influence their leadership style and how cultural awareness can enhance their effectiveness. "
-            #     "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
-            # )
-
-            summary_description = f"""
-You are generating an executive summary for a professional leadership report. DO NOT include fictional elements like the current date or salutations. DO NOT include the participant's name in a heading. 
-
-Write a clear, well-organized executive summary (maximum 300 words) based on the following inputs:
-
-- Participant Name: {participant_name}
-- Industry: {participant_industry}
-- Job Function: {participant_role}
-- Leadership Score: {score_pct:.1f}/100
-- Leadership Category: {level}
-- Country of Work: {country_work}
-- Country of Birth: {birth_country}
-- Closest Cultures: {', '.join(closest_cultures)}
-
-Instructions:
-1. Begin with a professional overview of the participant’s leadership score and category.
-2. Reflect on what this level of capability means for their team and organizational culture in the context of their industry.
-3. Discuss how their cultural background (birth country vs work country) might influence their leadership style, based on Hofstede’s dimensions.
-4. Avoid headers like “Call to Action” or fake dates. Use a constructive, motivational tone in paragraph format.
-5. Conclude with an uplifting statement encouraging leadership development.
-
-Keep the entire response concise, insightful, and under 300 words.
-"""
-
+            """ + 
+                f"Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}. "
+                f"They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory. "
+                f"Label their leadership category as '{level}'. Reflect on the implications of this level of leadership capability "
+                f"on team performance and organizational culture within the context of {participant_industry}. Use positive, constructive tone. "
+                f"Also take into account that the participant currently works in {country_work} but was born in {birth_country}. "
+                f"Comment on how cultural dimensions might influence their leadership style and how cultural awareness can enhance their effectiveness. "
+                "Explain why leadership development is vital in their role and industry, and include a motivational call to action for growth." + f" Their leadership practices culturally align best with: {', '.join(closest_cultures)}."
+            )
 
             # Run the crew
 
