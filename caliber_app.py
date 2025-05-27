@@ -601,7 +601,7 @@ if st.session_state.page == max_page:
 # Keep the entire response concise, insightful, and under 400 words.
 # """
             summary_description = f"""
-You are generating an executive summary for a professional leadership report. Avoid fake elements like the current date or salutations. DO NOT include a header with the participant’s name or title. Instead, refer to the participant by name naturally within the body of the summary, addressing them in the first person.
+You are generating an executive summary for a professional leadership report. Avoid fake elements like the current date or salutations. DO NOT include a header with the participant’s name or title. Instead, refer to the participant by name naturally within the body of the summary.  Speak to the participant directly.
 
 Write a clear, well-organized executive summary (under 500 words) based on the following:
 
@@ -650,20 +650,30 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
             # Explain the significance of each score, leadership potential, and team/organizational impact.
             # Use CALIBER tone, structure, and style.
             # """
+#             page2_prompt = f"""
+# You are writing a personalized interpretation of the participant’s leadership profile based on their scores across 10 dimensions.
+
+# Organize your response in two cohesive sections:
+# - **Innovation**: Communication, Vision, Authenticity, Empowerment, Creativity
+# - **Operations**: Stewardship, Competence, Confidence, Reinforcement, Culture
+
+# For each cluster:
+# 1. Interpret the participant’s scores, highlighting both strengths and opportunities.
+# 2. Discuss how these traits may manifest in their leadership behavior, influence team dynamics, and shape organizational outcomes.
+# 3. Use a warm, insightful, and empowering tone aligned with CALIBER's coaching style.
+
+# Avoid listing scores mechanically. Instead, weave them naturally into a narrative that reflects the participant’s potential and leadership journey.
+# """
+
             page2_prompt = f"""
-You are writing a personalized interpretation of the participant’s leadership profile based on their scores across 10 dimensions.
+            {participant_name}, let's take a closer look at your leadership profile. Reflect on your strengths and growth opportunities across two core areas: Innovation and Operations. Speak to the participant directly.
 
-Organize your response in two cohesive sections:
-- **Innovation**: Communication, Vision, Authenticity, Empowerment, Creativity
-- **Operations**: Stewardship, Competence, Confidence, Reinforcement, Culture
+            - **Innovation** covers Communication, Vision, Authenticity, Empowerment, and Creativity.
+            - **Operations** includes Stewardship, Competence, Confidence, Reinforcement, and Culture.
 
-For each cluster:
-1. Interpret the participant’s scores, highlighting both strengths and opportunities.
-2. Discuss how these traits may manifest in their leadership behavior, influence team dynamics, and shape organizational outcomes.
-3. Use a warm, insightful, and empowering tone aligned with CALIBER's coaching style.
+            Write two clear paragraphs — one for Innovation and one for Operations — highlighting standout scores and opportunities. Offer concrete suggestions for improvement and tie each insight to potential team or organizational impact. Use a confident, encouraging tone and address {participant_name} directly.  Keep it all under 500 words.
+            """
 
-Avoid listing scores mechanically. Instead, weave them naturally into a narrative that reflects the participant’s potential and leadership journey.
-"""
 
             page2_result = llm.predict(page2_prompt)
 
@@ -680,15 +690,26 @@ Avoid listing scores mechanically. Instead, weave them naturally into a narrativ
             # Include potential cultural tensions or synergies and leadership guidance.
             # Use the official CALIBER tone and structure.
             # """
+#             culture_prompt = f"""
+# Write a thoughtful reflection on how being born in {birth_country} and currently working in {country_work} may influence the participant’s leadership style.
+
+# Reference Hofstede’s cultural dimensions to explore how national values—such as attitudes toward hierarchy, uncertainty, or individualism—might shape expectations and behavior in the workplace.
+
+# Highlight potential cultural tensions or synergies the participant may encounter, and offer supportive, actionable guidance for leading effectively across these cultural dynamics.
+
+# Maintain a constructive, growth-focused tone consistent with CALIBER’s personalized coaching approach.
+# """
+
             culture_prompt = f"""
-Write a thoughtful reflection on how being born in {birth_country} and currently working in {country_work} may influence the participant’s leadership style.
+            Explore how being born in {birth_country} and now working in {country_work} might shape {participant_name}’s leadership expectations and behaviors.
 
-Reference Hofstede’s cultural dimensions to explore how national values—such as attitudes toward hierarchy, uncertainty, or individualism—might shape expectations and behavior in the workplace.
+            - Use Hofstede’s dimensions to interpret cultural contrasts.
+            - Highlight where {participant_name}'s cultural values may align or conflict with workplace expectations.
+            - Offer constructive guidance on how {participant_name} can adapt to thrive across cultural settings.
 
-Highlight potential cultural tensions or synergies the participant may encounter, and offer supportive, actionable guidance for leading effectively across these cultural dynamics.
+            Write in the second person (e.g., “You may find...”) and maintain CALIBER's supportive and thoughtful tone.
+            """
 
-Maintain a constructive, growth-focused tone consistent with CALIBER’s personalized coaching approach.
-"""
 
             culture_result = llm.predict(culture_prompt)
 
@@ -701,15 +722,27 @@ Maintain a constructive, growth-focused tone consistent with CALIBER’s persona
             # Offer guidance for cross-cultural adaptability and leadership effectiveness.
             # Use CALIBER tone and format.
             # """
+#             coach_prompt = f"""
+# Develop a personalized leadership growth plan for {participant_name} based on their assessment results.
+
+# Identify 3 to 5 focused areas for development, drawing from both Innovation (e.g., Communication, Vision, Creativity) and Operations (e.g., Stewardship, Competence, Culture) dimensions. For each area, provide a brief rationale that highlights its significance for their role and leadership journey.
+
+# Incorporate insights from Hofstede’s cultural dimensions, especially as they relate to alignment with cultural profiles like {', '.join(closest_cultures)}. Reflect on how these cultural influences might support or challenge the participant's growth.
+
+# Conclude with clear, supportive guidance for cultivating cross-cultural leadership effectiveness. Maintain CALIBER’s tone: personalized, motivational, and forward-looking.
+# """
+
             coach_prompt = f"""
-Develop a personalized leadership growth plan for {participant_name} based on their assessment results.
+            Create a personalized leadership development plan for {participant_name}. Identify 3 to 5 growth areas across Innovation and Operations.
 
-Identify 3 to 5 focused areas for development, drawing from both Innovation (e.g., Communication, Vision, Creativity) and Operations (e.g., Stewardship, Competence, Culture) dimensions. For each area, provide a brief rationale that highlights its significance for their role and leadership journey.
+            For each:
+            - Provide a short title (e.g., “Strategic Communication”) and a one-sentence rationale.
+            - Give 1-2 practical steps {participant_name} can take to improve.
+            - Briefly comment on how {', '.join(closest_cultures)} cultural patterns may influence leadership effectiveness.
 
-Incorporate insights from Hofstede’s cultural dimensions, especially as they relate to alignment with cultural profiles like {', '.join(closest_cultures)}. Reflect on how these cultural influences might support or challenge the participant's growth.
+            End with an inspiring message encouraging reflection, application, and follow-up. Write as if coaching {participant_name} directly.
+            """
 
-Conclude with clear, supportive guidance for cultivating cross-cultural leadership effectiveness. Maintain CALIBER’s tone: personalized, motivational, and forward-looking.
-"""
 
             coach_result = llm.predict(coach_prompt)
 
@@ -720,15 +753,26 @@ Conclude with clear, supportive guidance for cultivating cross-cultural leadersh
             # Encourage multi-source feedback and close with an invitation to contact admin@caliberleadership.com.
             # Use CALIBER style.
             # """
+#             invite_prompt = """
+# Craft a one-page introduction to the CALIBER 360-Degree Leadership Inventory.
+
+# Begin by explaining the purpose of the tool: to offer a holistic perspective on leadership by gathering insights from self and others. Emphasize how the process increases self-awareness, uncovers potential biases, tracks leadership growth over time, and identifies cultural alignment.
+
+# Encourage participation from diverse feedback sources—peers, direct reports, and supervisors—to gain a balanced view of leadership strengths and opportunities.
+
+# Conclude with a warm, professional invitation to learn more by contacting admin@caliberleadership.com. Maintain the CALIBER style: clear, concise, and insight-driven.
+# """
             invite_prompt = """
-Craft a one-page introduction to the CALIBER 360-Degree Leadership Inventory.
+            Introduce the CALIBER 360-Degree Leadership Inventory in a clear, engaging tone.
 
-Begin by explaining the purpose of the tool: to offer a holistic perspective on leadership by gathering insights from self and others. Emphasize how the process increases self-awareness, uncovers potential biases, tracks leadership growth over time, and identifies cultural alignment.
+            - Explain its purpose: gathering feedback from peers, reports, and supervisors.
+            - Highlight benefits: increased self-awareness, cultural alignment, bias reduction, and progress tracking.
+            - Encourage participants to involve diverse raters and view feedback as a gift.
+            - Close with an invitation to contact admin@caliberleadership.com.
 
-Encourage participation from diverse feedback sources—peers, direct reports, and supervisors—to gain a balanced view of leadership strengths and opportunities.
+            Address the reader as “you” and maintain CALIBER’s warm, developmental tone.
+            """
 
-Conclude with a warm, professional invitation to learn more by contacting admin@caliberleadership.com. Maintain the CALIBER style: clear, concise, and insight-driven.
-"""
 
             invite_result = llm.predict(invite_prompt)
 
