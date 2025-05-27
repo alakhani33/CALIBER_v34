@@ -24,13 +24,6 @@ def clean_markdown(text):
     text = re.sub(r'^\s*[-*]\s+', '• ', text, flags=re.MULTILINE)  # bullets
     return text.replace("\n\n", "<br/><br/>").replace("\n", "<br/>")  # line breaks
 
-
-# def generate_caliber_report_with_cover(
-#     output_path,
-#     participant_name,
-#     report_date,
-#     sections_dict
-# ):
 def generate_caliber_report_with_cover(
     output_path,
     participant_name,
@@ -59,19 +52,12 @@ def generate_caliber_report_with_cover(
     story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
     story.append(PageBreak())
 
-    # Main content
-    # for section, content in sections_dict.items():
-    #     story.append(Paragraph(section, styles["Heading"]))
-    #     cleaned_content = clean_markdown(content)
-    #     story.append(Paragraph(cleaned_content, styles["Body"]))
-    #     story.append(Spacer(1, 0.2 * inch))
     from reportlab.platypus import Image as RLImage
 
     for section, content in sections_dict.items():
         story.append(Paragraph(section, styles["Heading"]))
         cleaned_content = clean_markdown(content)
         story.append(Paragraph(cleaned_content, styles["Body"]))
-        
         
         # Optional image logic
         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
@@ -90,8 +76,6 @@ def generate_caliber_report_with_cover(
             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
 
         story.append(Spacer(1, 0.3 * inch))
-    
-
 
     doc.build(story)
     return output_path
@@ -106,157 +90,12 @@ from googleapiclient.http import MediaFileUpload
 
 folder_id = "1Vnm_oKNaYjWVB95SSEg8hqiwDmclY3H9"
 
-# def upload_to_drive(file_path, file_name, mime_type, folder_id):
-#     credentials = service_account.Credentials.from_service_account_file(
-#         "drive_service_account.json",
-#         scopes=["https://www.googleapis.com/auth/drive"]
-#     )
-#     service = build("drive", "v3", credentials=credentials)
-    
-#     file_metadata = {
-#         "name": file_name,
-#         "parents": [folder_id]
-#     }
-#     media = MediaFileUpload(file_path, mimetype=mime_type)
-    
-#     uploaded_file = service.files().create(
-#         body=file_metadata,
-#         media_body=media,
-#         fields="id"
-#     ).execute()
-    
-#     return uploaded_file.get("id")
-
-# def upload_to_drive(file_path, file_name, mime_type, folder_id):
-#     service = build("drive", "v3", credentials=credentials)
-
-#     file_metadata = {
-#         "name": file_name,
-#         "parents": [folder_id]
-#     }
-#     media = MediaFileUpload(file_path, mimetype=mime_type)
-
-#     uploaded_file = service.files().create(
-#         body=file_metadata,
-#         media_body=media,
-#         fields="id"
-#     ).execute()
-
-#     return uploaded_file.get("id")
-
-
 from google.oauth2 import service_account
 
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gdrive"],
     scopes=["https://www.googleapis.com/auth/drive"]
 )
-
-import os
-
-
-from reportlab.lib.pagesizes import LETTER
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-
-# def generate_caliber_report_with_cover(
-#     output_path,
-#     participant_name,
-#     report_date,
-#     sections_dict
-# ):
-# def generate_caliber_report_with_cover(
-#     output_path,
-#     participant_name,
-#     report_date,
-#     sections_dict,
-#     plot_path=None,
-#     bar_chart_path=None,
-#     hofstede_path=None
-# ):
-#     doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-#                             rightMargin=72, leftMargin=72,
-#                             topMargin=72, bottomMargin=72)
-
-#     styles = getSampleStyleSheet()
-#     styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-#     styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-#     styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-#     styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-#     story = []
-
-#     # Cover page
-#     story.append(Spacer(1, 2 * inch))
-#     story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-#     story.append(Paragraph(participant_name, styles["CoverSub"]))
-#     story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-#     story.append(PageBreak())
-
-#     # # Main content
-#     # for section, content in sections_dict.items():
-#     #     story.append(Paragraph(section, styles["Heading"]))
-#     #     story.append(Paragraph(content, styles["Body"]))
-#     #     story.append(Spacer(1, 0.2 * inch))
-#     from reportlab.platypus import Image as RLImage
-
-#     # for section, content in sections_dict.items():
-#     #     story.append(Paragraph(section, styles["Heading"]))
-#     #     cleaned_content = clean_markdown(content)
-#     #     story.append(Paragraph(cleaned_content, styles["Body"]))
-#     from reportlab.platypus import Image as RLImage
-
-#     for section, content in sections_dict.items():
-#         story.append(Paragraph(section, styles["Heading"]))
-#         cleaned_content = clean_markdown(content)
-#         story.append(Paragraph(cleaned_content, styles["Body"]))
-        
-        
-#         # Optional image logic
-#         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-#             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
-#         if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-#             story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
-#         if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-#             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
-#         story.append(Spacer(1, 0.3 * inch))
-    
-
-        
-        
-#         # Optional image logic
-#         if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-#             story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
-#         if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-#             story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
-#         if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-#             story.append(Spacer(1, 0.1 * inch))
-#             story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-#             story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
-#         story.append(Spacer(1, 0.3 * inch))
-    
-
-
-
-#     doc.build(story)
-#     return output_path
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -293,7 +132,6 @@ def upload_to_drive(file_path, file_name, mime_type, folder_id):
         raise RuntimeError(f"Drive upload failed: {e}")
 
 
-
 def sanitize_text(text):
     return (
         text.replace("–", "-")
@@ -306,12 +144,12 @@ def sanitize_text(text):
     )
 
 
-
 # llm = ChatOpenAI(
 #     model='gpt-3.5-turbo',
 #     temperature=0,
 #     openai_api_key=st.secrets["openai_api_key"]
 # )
+
 from langchain.document_loaders import WebBaseLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
@@ -320,8 +158,6 @@ from langchain.chains import RetrievalQA
 from langchain.tools import Tool
 from langchain.agents import initialize_agent, load_tools
 from langchain_google_genai import ChatGoogleGenerativeAI
-# import gradio as gr
-# import requests
 import json
 
 # Set the model name for our LLMs
@@ -331,7 +167,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # ✅ Initialize the model
 llm = ChatGoogleGenerativeAI(google_api_key=GEMINI_API_KEY, model=GEMINI_MODEL, temperature=0.3)
-
 
 
 st.set_page_config(page_title="CALIBER Leadership Inventory©", layout="centered")
@@ -610,8 +445,6 @@ if st.session_state.page == max_page:
             # Optional: add a blank row for separation
             blank_row = pd.DataFrame([['', '']], columns=['Dimension', 'Score'])
 
-            
-
             # Prepare metadata (demographics)
             meta_info = pd.DataFrame({
                 'Field': [
@@ -664,17 +497,6 @@ if st.session_state.page == max_page:
                 st.stop()  # Stop further execution (no report generation)
 
 
-            
-            # st.image(plot_filename, caption="Your Overall Leadership Score", use_column_width=True)
-
-            # with open(plot_filename, "rb") as f:
-            #     st.download_button(
-            #         label="📊 Download Your Score Plot",
-            #         data=f,
-            #         file_name=plot_filename,
-            #         mime="image/png"
-            #     )
-
             import streamlit as st
             from PIL import Image
 
@@ -688,126 +510,16 @@ if st.session_state.page == max_page:
                 level = "Performing Leader"
 
 
-            
             # Collect contextual inputs
             participant_role = st.session_state.get("job_function", "a professional")
             participant_industry = st.session_state.get("industry", "their industry")
             country_work = st.session_state.get("country_work", "their country of work")
             birth_country = st.session_state.get("birth_country", "their country of origin")
 
-            
-            # Show and offer download for report
-            # st.subheader("📝 Leadership Expert Report")
-
-            # Insert the images
-
-            # Define image paths
-            # plot_path = f"leadership_score_{clean_name}_{timestamp}.png"
-            # bar_chart_path = f"leadership_dimensions_{clean_name}_{timestamp}.png"
+    
             import matplotlib.pyplot as plt
             import seaborn as sns
             import os
-
-
-            from reportlab.lib.pagesizes import LETTER
-            from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak
-            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-            from reportlab.lib.units import inch
-
-            # def generate_caliber_report_with_cover(
-            #     output_path,
-            #     participant_name,
-            #     report_date,
-            #     sections_dict
-            # ):
-        #     def generate_caliber_report_with_cover(
-        #         output_path,
-        #         participant_name,
-        #         report_date,
-        #         sections_dict,
-        #         plot_path=None,
-        #         bar_chart_path=None,
-        #         hofstede_path=None
-        #     ):
-        #         doc = SimpleDocTemplate(output_path, pagesize=LETTER,
-        #                                 rightMargin=72, leftMargin=72,
-        #                                 topMargin=72, bottomMargin=72)
-
-        #         styles = getSampleStyleSheet()
-        #         styles.add(ParagraphStyle(name="Heading", fontSize=14, leading=18, spaceAfter=12, spaceBefore=12, fontName="Helvetica-Bold"))
-        #         styles.add(ParagraphStyle(name="Body", fontSize=11, leading=14, spaceAfter=12))
-        #         styles.add(ParagraphStyle(name="CoverTitle", fontSize=24, leading=30, spaceAfter=24, alignment=1, fontName="Helvetica-Bold"))
-        #         styles.add(ParagraphStyle(name="CoverSub", fontSize=16, leading=20, spaceAfter=12, alignment=1))
-
-        #         story = []
-
-        #         # Cover page
-        #         story.append(Spacer(1, 2 * inch))
-        #         story.append(Paragraph("CALIBER Leadership Inventory", styles["CoverTitle"]))
-        #         story.append(Paragraph(participant_name, styles["CoverSub"]))
-        #         story.append(Paragraph(f"Report generated on {report_date}", styles["CoverSub"]))
-        #         story.append(PageBreak())
-
-        #         # Main content
-        #         # for section, content in sections_dict.items():
-        #         #     story.append(Paragraph(section, styles["Heading"]))
-        #         #     story.append(Paragraph(content, styles["Body"]))
-        #         #     story.append(Spacer(1, 0.2 * inch))
-        #         from reportlab.platypus import Image as RLImage
-
-        #         from reportlab.platypus import Image as RLImage
-
-        #         for section, content in sections_dict.items():
-        #             story.append(Paragraph(section, styles["Heading"]))
-        #             cleaned_content = clean_markdown(content)
-        #             story.append(Paragraph(cleaned_content, styles["Body"]))
-                    
-                    
-        # # Optional image logic
-        # if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-        #     story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
-        # if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-        #     story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
-        # if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-        #     story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
-        # story.append(Spacer(1, 0.3 * inch))
-    
-
-                    
-                    
-        # # Optional image logic
-        # if "Overall Leadership Score" in section and plot_path and os.path.exists(plot_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(plot_path, width=6.5*inch, height=1.8*inch))
-        #     story.append(Paragraph("Overall Leadership Score", styles["Body"]))
-
-        # if "Innovation & Operations" in section and bar_chart_path and os.path.exists(bar_chart_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(bar_chart_path, width=6.5*inch, height=3*inch))
-        #     story.append(Paragraph("Leadership Dimension Breakdown", styles["Body"]))
-
-        # if "Cultural Context" in section and hofstede_path and os.path.exists(hofstede_path):
-        #     story.append(Spacer(1, 0.1 * inch))
-        #     story.append(RLImage(hofstede_path, width=6.5*inch, height=3*inch))
-        #     story.append(Paragraph("Cultural Dimensions Profile (Hofstede)", styles["Body"]))
-
-        # story.append(Spacer(1, 0.3 * inch))
-    
-
-
-
-        #         doc.build(story)
-        #         return output_path
-
 
             # === Generate and Save Bar Chart ===
             # === Create and Save Hofstede Chart First ===
@@ -876,106 +588,39 @@ if st.session_state.page == max_page:
             plt.close(fig)
 
             # Create and save leadership score plot
-            def create_leadership_plot(score, save_path):
-                fig, ax = plt.subplots(figsize=(10, 2))
+            # def create_leadership_plot(score, save_path):
+            fig, ax = plt.subplots(figsize=(10, 2))
 
-                # Background color zones
-                ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5, label='Aspiring Leader')
-                ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5, label='Developing Leader')
-                ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5, label='Performing Leader')
+            # Background color zones
+            ax.axhspan(0, 1, xmin=0.0, xmax=0.3333, facecolor='#ff9999', alpha=0.5, label='Aspiring Leader')
+            ax.axhspan(0, 1, xmin=0.3333, xmax=0.6666, facecolor='#ffe066', alpha=0.5, label='Developing Leader')
+            ax.axhspan(0, 1, xmin=0.6666, xmax=1.0, facecolor='#99ff99', alpha=0.5, label='Performing Leader')
 
-                # Score line
-                ax.axvline(score, color='black', linewidth=3, label='Your Score')
+            # Score line
+            ax.axvline(leadership_custom_scores['Overall Leadership PCT']*100, color='black', linewidth=3, label='Your Score')
 
-                # Region Labels
-                ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
-                ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
-                ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
+            # Region Labels
+            ax.text(10, 0.8, 'Aspiring Leader', fontsize=10, color='black')
+            ax.text(40, 0.8, 'Developing Leader', fontsize=10, color='black')
+            ax.text(75, 0.8, 'Performing Leader', fontsize=10, color='black')
 
-                ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
-                ax.set_xlim(0, 100)
-                ax.set_yticks([])
-                ax.set_xlabel('Score')
-                sns.despine(left=True, bottom=True)
-                plt.tight_layout()
+            ax.set_title('Overall Leadership Score', fontsize=14, weight='bold')
+            ax.set_xlim(0, 100)
+            ax.set_yticks([])
+            ax.set_xlabel('Score')
+            sns.despine(left=True, bottom=True)
 
-                fig.savefig(save_path, dpi=150)
-                plt.close(fig)
+            sumplot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
+            plt.tight_layout()
+            fig.savefig(sumplot_path, dpi=150)
+            plt.close(fig)
 
-            # Save and show plot
-            plot_path  = f"leadership_score_{clean_name}_{timestamp}.png"
-            create_leadership_plot(leadership_custom_scores['Overall Leadership PCT']*100, plot_path )
-
-            # === Next Page Preparation ===
-            # Remove inline chart display, only save chart
-            # try:
-            #     image = Image.open(plot_path)
-            #     st.image(image, caption="Overall Leadership Score", use_column_width=True)
-            # except Exception as e:
-            #     st.warning(f"Could not load image: {e}")
-            # Generate PDF with summary and images
-            # from fpdf import FPDF
-
-
-            # def sanitize_text(text):
-            #     return (
-            #         text.replace("–", "-")
-            #             .replace("—", "-")
-            #             .replace("’", "'")
-            #             .replace("“", '"')
-            #             .replace("”", '"')
-            #             .replace("…", "...")
-            #             .replace("•", "-")
-            #     )
-
-
-            # pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
-            # class PDFReport(FPDF):
-            #     def footer(self):
-            #         self.set_y(-10)
-            #         self.set_font("Arial", "I", 8)
-            #         self.set_text_color(128)
-            #         self.cell(0, 10, "© 2025 M.A. Lakhani. All rights reserved.", 0, 0, "C")
-            #     def header(self):
-            #         self.set_font("Arial", "B", 12)
-            #         self.cell(0, 10, "CALIBER Leadership Inventory Summary", ln=True, align="C")
-            #         self.ln(5)
-
-            #     def chapter_title(self, title):
-            #         self.set_font("Arial", "B", 11)
-            #         self.cell(0, 10, title, ln=True, align="L")
-            #         self.ln(4)
-
-            #     def chapter_body(self, body):
-            #         self.set_font("Arial", "", 10)
-            #         self.multi_cell(0, 5, body)
-            #         self.ln()
-
-            #     def add_image(self, path, caption):
-            #         self.image(path, w=180)
-            #         self.set_font("Arial", "I", 9)
-            #         self.cell(0, 5, caption, ln=True, align="C")
-            #         self.ln(5)
-
-            # pdf = PDFReport()
-            # pdf.add_page()
-            # pdf.chapter_body(sanitize_text(result))
-            # pdf.add_image(plot_path, "Overall Leadership Score")
-            # # Page 2 – Leadership Dimension Breakdown
-            # pdf.add_page()
-            # pdf.chapter_title("Leadership Dimension Breakdown")
-            # pdf.add_image(bar_chart_path, "Dimension Breakdown (Innovation vs Operations)")
-
-
+            
             from datetime import datetime
 
             report_date = datetime.now().strftime("%B %d, %Y")
             pdf_filename = f"leadership_summary_{clean_name}_{timestamp}.pdf"
 
-            # Define second expert agent for interpretation
-            # from crewai import Agent, Task
-
-            # Define the expert agent
 
             # Define the interpretation task
             summary_description = ("""
@@ -994,15 +639,15 @@ if st.session_state.page == max_page:
             # Run the crew
 
             
-            summary_prompt = f"""
-            Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}.
-            They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory.
-            Label their leadership category as '{level}'.
-            Reflect on implications for team performance and culture within the context of {participant_industry}.
-            Include how being born in {birth_country} and working in {country_work} affects leadership style.
-            Align analysis with Hofstede cultural dimensions: {', '.join(closest_cultures)}.
-            Use the official CALIBER tone: positive, structured, and actionable.
-            """
+            # summary_prompt = f"""
+            # Write a 1-page report for {participant_name} who works in {participant_industry} as {participant_role}.
+            # They scored {score_pct:.1f}/100 on the CALIBER Leadership Inventory.
+            # Label their leadership category as '{level}'.
+            # Reflect on implications for team performance and culture within the context of {participant_industry}.
+            # Include how being born in {birth_country} and working in {country_work} affects leadership style.
+            # Align analysis with Hofstede cultural dimensions: {', '.join(closest_cultures)}.
+            # Use the official CALIBER tone: positive, structured, and actionable.
+            # """
             # result = llm.predict(summary_prompt)
             result = llm.predict(summary_description)
 
@@ -1034,12 +679,6 @@ if st.session_state.page == max_page:
             """
             culture_result = llm.predict(culture_prompt)
 
-            # pdf.chapter_body(sanitize_text(culture_result))
-            # pdf.add_image(hofstede_path, "Cultural Dimensions Profile (Hofstede)")
-
-            # # Page 4 – Actionable Recommendations
-            # pdf.add_page()
-            # pdf.chapter_title("Actionable Development Recommendations")
             
             coach_prompt = f"""
             Write a structured and accessible development plan for {participant_name}.
@@ -1051,11 +690,6 @@ if st.session_state.page == max_page:
             """
             coach_result = llm.predict(coach_prompt)
 
-            # pdf.chapter_body(sanitize_text(coach_result))
-
-            # # Page 5 – Invitation to 360-Degree CALIBER Assessment
-            # pdf.add_page()
-            # pdf.chapter_title("Invitation to 360-Degree CALIBER Assessment")
             
             invite_prompt = """
             Write a 1-page summary introducing the CALIBER 360-degree leadership inventory.
@@ -1064,8 +698,6 @@ if st.session_state.page == max_page:
             Use CALIBER style.
             """
             invite_result = llm.predict(invite_prompt)
-
-            # pdf.chapter_body(sanitize_text(invite_result))
 
 
             section_dict = {
@@ -1076,18 +708,13 @@ if st.session_state.page == max_page:
                 "Invitation to 360-Degree CALIBER Assessment": invite_result
             }
 
-            # generate_caliber_report_with_cover(
-            #     output_path=pdf_filename,
-            #     participant_name=participant_name,
-            #     report_date=report_date,
-            #     sections_dict=section_dict
-            # )
+            
             generate_caliber_report_with_cover(
                 output_path=pdf_filename,
                 participant_name=participant_name,
                 report_date=report_date,
                 sections_dict=section_dict,
-                plot_path=plot_path,
+                plot_path=sumplot_path,
                 bar_chart_path=bar_chart_path,
                 hofstede_path=hofstede_path
             )
