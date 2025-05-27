@@ -853,10 +853,11 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
                         # story.append(PageBreak())
                     story.append(Spacer(1, 0.3 * inch))
 
-                template = PageTemplate(id='footer_template', frames=frame, onPage=add_footer)
-                doc.addPageTemplates([template])
-                
-                doc.build(story)
+                # template = PageTemplate(id='footer_template', frames=frame, onPage=add_footer)
+                # doc.addPageTemplates([template])
+                doc.build(story, onFirstPage=add_footer, onLaterPages=add_footer)
+
+                # doc.build(story)
                 return output_path
 
             
