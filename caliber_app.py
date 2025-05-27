@@ -707,7 +707,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
             - Highlight where {participant_name}'s cultural values may align or conflict with workplace expectations.
             - Offer constructive guidance on how {participant_name} can adapt to thrive across cultural settings.
 
-            Write in the second person (e.g., “You may find...”) and maintain CALIBER's supportive and thoughtful tone.
+            Write in the second person (e.g., “You may find...”) and maintain CALIBER's supportive and thoughtful tone.  Keep it all under 500 words.
             """
 
 
@@ -733,7 +733,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
 # """
 
             coach_prompt = f"""
-            Create a personalized leadership development plan for {participant_name}. Identify 3 to 5 growth areas across Innovation and Operations.
+            Create a personalized leadership development plan for {participant_name}. Identify 3 to 5 growth areas across Innovation and Operations.  Keep this entire section under 500 words.
 
             For each:
             - Provide a short title (e.g., “Strategic Communication”) and a one-sentence rationale.
@@ -763,12 +763,12 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
 # Conclude with a warm, professional invitation to learn more by contacting admin@caliberleadership.com. Maintain the CALIBER style: clear, concise, and insight-driven.
 # """
             invite_prompt = """
-            Introduce the CALIBER 360-Degree Leadership Inventory in a clear, engaging tone.
+            Introduce the CALIBER 360-Degree Leadership Inventory in a clear, engaging tone.  Keep this section under 500 words.
 
             - Explain its purpose: gathering feedback from peers, reports, and supervisors.
             - Highlight benefits: increased self-awareness, cultural alignment, bias reduction, and progress tracking.
             - Encourage participants to involve diverse raters and view feedback as a gift.
-            - Close with an invitation to contact admin@caliberleadership.com.
+            - Close with an invitation to contact home.caliber.leadership@gmail.com.  Make the contact email address stand out.
 
             Address the reader as “you” and maintain CALIBER’s warm, developmental tone.
             """
