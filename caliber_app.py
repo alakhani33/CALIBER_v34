@@ -685,7 +685,8 @@ if st.session_state.page == max_page:
                     story.append(Paragraph(cleaned_content, styles["Body"]))
                     
                     # Optional image logic
-                    if "Overall Leadership Score" in section and sumplot_path and os.path.exists(sumplot_path):
+                    # if "Overall Leadership Score" in section and sumplot_path and os.path.exists(sumplot_path):
+                    if "Executive Summary" in section and sumplot_path and os.path.exists(sumplot_path):
                         story.append(Spacer(1, 0.1 * inch))
                         story.append(RLImage(sumplot_path, width=6.5*inch, height=1.8*inch))
                         story.append(Paragraph("Overall Leadership Score", styles["Body"]))
