@@ -22,7 +22,14 @@ def clean_markdown(text):
     text = re.sub(r'__([^_]+)__', r'\1', text)     # remove underline
     text = re.sub(r'#+ ', '', text)               # remove headings
     text = re.sub(r'^\s*[-*]\s+', '• ', text, flags=re.MULTILINE)  # bullets
+    text = re.sub(r'<span style="[^"]*">', '', text)  # remove span styles
+    text = text.replace('</span>', '')  # remove closing span
     return text.replace("\n\n", "<br/><br/>").replace("\n", "<br/>")  # line breaks
+
+# def clean_markdown(text):
+#     text = re.sub(r'<span style="[^"]*">', '', text)  # remove span styles
+#     text = text.replace('</span>', '')  # remove closing span
+#     return text
 
 
 from utils_orig import get_openai_api_key
@@ -820,6 +827,7 @@ Avoid formal section titles like “Call to Action.” Write in paragraph format
                     story.append(Paragraph(section, styles["Heading"]))
                     cleaned_content = clean_markdown(content)
                     story.append(Paragraph(cleaned_content, styles["Body"]))
+                    story.append(PageBreak())
                     
                     # Optional image logic
                     # if "Overall Leadership Score" in section and sumplot_path and os.path.exists(sumplot_path):
