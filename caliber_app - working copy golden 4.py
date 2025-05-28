@@ -213,7 +213,7 @@ if st.session_state.page == 0:
 
     st.session_state.survey_for = st.radio("Who are you taking this survey for:", ["Myself", "Someone Else"])
     if st.session_state.survey_for == "Someone Else":
-        st.session_state.subject_name = st.text_input("Name of the person you are evaluating").strip().title()
+        st.session_state.subject_name = st.text_input("Name of the person you are evaluating", key="subject_name")
         relation = st.selectbox("Your relationship to that person:", ["The person is my Manager", "The person is my Direct Report", "The person is my Peer", "Other"])
         if relation == "Other":
             st.session_state.relationship = st.text_input("Please describe your relationship")
