@@ -198,8 +198,8 @@ max_page = 5
 # Page content
 if st.session_state.page == 0:
     st.subheader("Participant Information")
-    st.session_state.name = st.text_input("Your Name").strip().title()
-    st.session_state.email = st.text_input("Your Email Address").strip()  # ✅ ADD THIS LINE
+    st.session_state.name = st.text_input("Your Name").title()
+    st.session_state.email = st.text_input("Your Email Address")  # ✅ ADD THIS LINE
     st.session_state.industry = st.text_input("Industry in which you work").strip().title()
     st.session_state.job_function = st.text_input("Your job function").strip().title()
     st.session_state.country_work = st.text_input("Country where you currently work").strip().title()
@@ -233,10 +233,6 @@ if st.session_state.page == 0:
     #     st.session_state.invalid_birth_country = True
     # else:
     #     st.session_state.invalid_birth_country = False
-
-# Added to avert a .csv capture issue
-    country_work = st.session_state.get("Country where you currently work", "").strip().title()
-
 
     occupation_text = st.session_state.get("job_function", "").lower()
     st.session_state.is_retired = any(kw in occupation_text for kw in ["retired", "not working", "unemployed", "none"])
