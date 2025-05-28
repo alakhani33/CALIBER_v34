@@ -460,6 +460,7 @@ if st.session_state.page == max_page:
 
             # If survey was for someone else, skip the rest
             if st.session_state.get("survey_for") == "Someone Else":
+                csv_drive_id = upload_to_drive(filename, filename, "text/csv", folder_id)
                 st.success("✅ Thank you for providing your assessment. The results have been saved.")
                 st.markdown("You may now close this window or return to the home page.")
                 st.stop()  # Stop further execution (no report generation)
