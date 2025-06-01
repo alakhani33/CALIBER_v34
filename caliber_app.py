@@ -304,6 +304,13 @@ else:
         st.session_state.responses[i] = st.slider(f"{item[0]}. {statement}", 1, 5, 3, key=f"q{i}")
         # st.session_state.responses[i] = st.slider(f"{item[0]}. {statement}", 1, 5, 3, key=f"q{i}")
 
+country_work = st.session_state.get("country_work")
+country_birth = st.session_state.get("country_birth")
+
+# # Always store both, regardless of match
+# demographics["Country of Work"] = country_work
+# demographics["Country of Birth"] = country_birth
+
 # Navigation buttons (bottom only, no form requirement)
 col1, col2 = st.columns([1, 1])
 with col1:
