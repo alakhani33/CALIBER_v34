@@ -470,6 +470,14 @@ if st.session_state.page == max_page:
 
     
             # Clean name for filename
+            # Collect contextual inputs
+            participant_role = st.session_state.get("job_function", "a professional")
+            participant_industry = st.session_state.get("industry", "their industry")
+            # country_work = st.session_state.get("country_work", "their country of work")
+            # birth_country = st.session_state.get("birth_country", "their country of origin")
+            country_work = get_country("country_work"),
+            birth_country = get_country("birth_country"),
+
             participant_name = st.session_state.get("name", "anonymous")
             clean_name = re.sub(r'\W+', '_', participant_name.strip())
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -499,12 +507,7 @@ if st.session_state.page == max_page:
                 level = "Performing Leader"
 
 
-            # Collect contextual inputs
-            participant_role = st.session_state.get("job_function", "a professional")
-            participant_industry = st.session_state.get("industry", "their industry")
-            country_work = st.session_state.get("country_work", "their country of work")
-            birth_country = st.session_state.get("birth_country", "their country of origin")
-
+            
     
             import matplotlib.pyplot as plt
             import seaborn as sns
