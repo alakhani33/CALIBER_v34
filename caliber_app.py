@@ -31,7 +31,7 @@ def clean_markdown(text):
 #     text = text.replace('</span>', '')  # remove closing span
 #     return text
 def add_footer(canvas, doc):
-    footer_text = "© 2025 Dr. Ali Lakhani | CALIBER Leadership Inventory"
+    footer_text = "© 2025 Dr. M.A. Lakhani | CALIBER Leadership Inventory"
     canvas.saveState()
     canvas.setFont('Helvetica', 8)
     canvas.drawCentredString(4.25 * inch, 0.5 * inch, footer_text)
