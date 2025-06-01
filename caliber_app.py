@@ -424,6 +424,10 @@ if st.session_state.page == max_page:
             # Optional: add a blank row for separation
             blank_row = pd.DataFrame([['', '']], columns=['Dimension', 'Score'])
 
+            def get_country(field_name):
+                val = st.session_state.get(field_name, "").strip()
+                return val if val else "United States"
+
             # Prepare metadata (demographics)
             meta_info = pd.DataFrame({
                 'Field': [
@@ -442,8 +446,10 @@ if st.session_state.page == max_page:
                     st.session_state.get("email", ""),
                     st.session_state.get("job_function", ""),
                     st.session_state.get("industry", ""),
-                    st.session_state.get("country_work", ""),
-                    st.session_state.get("birth_country", ""),
+                    # st.session_state.get("country_work", ""),
+                    # st.session_state.get("birth_country", ""),
+                    get_country("country_work"),
+                    get_country("birth_country"),
                     st.session_state.get("survey_for", ""),
                     st.session_state.get("subject_name", "") if st.session_state.get("survey_for") == "Someone Else" else "",
                     st.session_state.get("relationship", "") if st.session_state.get("survey_for") == "Someone Else" else ""
