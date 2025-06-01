@@ -308,8 +308,8 @@ else:
 
 country_work = st.session_state.get("country_work")
 country_birth = st.session_state.get("country_birth")
-st.write("Work country selected 2:", country_work)
-st.write("Birth country selected 2:", birth_country)
+# st.write("Work country selected 2:", country_work)
+# st.write("Birth country selected 2:", birth_country)
 
 # # Always store both, regardless of match
 # demographics["Country of Work"] = country_work
@@ -459,8 +459,8 @@ if st.session_state.page == max_page:
             # Combine original df with new section
             df_combined = pd.concat([df, blank_row, dimension_df, blank_row, leadership_df, blank_row, meta_and_scores], ignore_index=True)
 
-            st.write("Work country selected 3:", country_work)
-            st.write("Birth country selected 3:", birth_country)
+            # st.write("Work country selected 3:", country_work)
+            # st.write("Birth country selected 3:", birth_country)
 
     
             # Clean name for filename
