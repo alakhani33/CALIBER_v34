@@ -210,8 +210,8 @@ if st.session_state.page == 0:
     # st.text_input("Your job function", key="job_function")
     # st.text_input("Country where you currently work", key="country_work")
     # st.text_input("Country where you were born", key="birth_country")
-    st.write("Work country selected 1:", country_work)
-    st.write("Birth country selected 1:", birth_country)
+    # st.write("Work country selected 1:", country_work)
+    # st.write("Birth country selected 1:", birth_country)
 
     st.session_state.survey_for = st.radio("Who are you taking this survey for:", ["Myself", "Someone Else"])
     if st.session_state.survey_for == "Someone Else":
