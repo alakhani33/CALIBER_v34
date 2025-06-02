@@ -31,7 +31,7 @@ def clean_markdown(text):
 #     text = text.replace('</span>', '')  # remove closing span
 #     return text
 def add_footer(canvas, doc):
-    footer_text = "© 2025 Dr. M.A. Lakhani | CALIBER Leadership Inventory"
+    footer_text = "© 2025 Dr. Ali Lakhani | CALIBER Leadership Inventory"
     canvas.saveState()
     canvas.setFont('Helvetica', 8)
     canvas.drawCentredString(4.25 * inch, 0.5 * inch, footer_text)
@@ -210,8 +210,6 @@ if st.session_state.page == 0:
     # st.text_input("Your job function", key="job_function")
     # st.text_input("Country where you currently work", key="country_work")
     # st.text_input("Country where you were born", key="birth_country")
-    # st.write("Work country selected 1:", country_work)
-    # st.write("Birth country selected 1:", birth_country)
 
     st.session_state.survey_for = st.radio("Who are you taking this survey for:", ["Myself", "Someone Else"])
     if st.session_state.survey_for == "Someone Else":
@@ -305,15 +303,6 @@ else:
 
         st.session_state.responses[i] = st.slider(f"{item[0]}. {statement}", 1, 5, 3, key=f"q{i}")
         # st.session_state.responses[i] = st.slider(f"{item[0]}. {statement}", 1, 5, 3, key=f"q{i}")
-
-country_work = st.session_state.get("country_work")
-country_birth = st.session_state.get("country_birth")
-# st.write("Work country selected 2:", country_work)
-# st.write("Birth country selected 2:", birth_country)
-
-# # Always store both, regardless of match
-# demographics["Country of Work"] = country_work
-# demographics["Country of Birth"] = country_birth
 
 # Navigation buttons (bottom only, no form requirement)
 col1, col2 = st.columns([1, 1])
@@ -424,14 +413,6 @@ if st.session_state.page == max_page:
             # Optional: add a blank row for separation
             blank_row = pd.DataFrame([['', '']], columns=['Dimension', 'Score'])
 
-            def get_country(field_name):
-                val = st.session_state.get(field_name, "").strip()
-                return val if val else "United States"
-            
-            def get_email(field_name):
-                val = st.session_state.get(field_name, "").strip()
-                return val if val else "Unknown"
-
             # Prepare metadata (demographics)
             meta_info = pd.DataFrame({
                 'Field': [
@@ -447,14 +428,11 @@ if st.session_state.page == max_page:
                 ],
                 'Value': [
                     st.session_state.get("name", ""),
-                    # st.session_state.get("email", ""),
-                    get_email("email"),
+                    st.session_state.get("email", ""),
                     st.session_state.get("job_function", ""),
                     st.session_state.get("industry", ""),
-                    # st.session_state.get("country_work", ""),
-                    # st.session_state.get("birth_country", ""),
-                    get_country("country_work"),
-                    get_country("birth_country"),
+                    st.session_state.get("country_work", ""),
+                    st.session_state.get("birth_country", ""),
                     st.session_state.get("survey_for", ""),
                     st.session_state.get("subject_name", "") if st.session_state.get("survey_for") == "Someone Else" else "",
                     st.session_state.get("relationship", "") if st.session_state.get("survey_for") == "Someone Else" else ""
@@ -470,20 +448,8 @@ if st.session_state.page == max_page:
             # Combine original df with new section
             df_combined = pd.concat([df, blank_row, dimension_df, blank_row, leadership_df, blank_row, meta_and_scores], ignore_index=True)
 
-            # st.write("Work country selected 3:", country_work)
-            # st.write("Birth country selected 3:", birth_country)
 
-    
             # Clean name for filename
-            # Collect contextual inputs
-            participant_role = st.session_state.get("job_function", "a professional")
-            participant_industry = st.session_state.get("industry", "their industry")
-            # country_work = st.session_state.get("country_work", "their country of work")
-            # birth_country = st.session_state.get("birth_country", "their country of origin")
-            country_work = get_country("country_work"),
-            birth_country = get_country("birth_country"),
-            email = get_email("email")
-
             participant_name = st.session_state.get("name", "anonymous")
             clean_name = re.sub(r'\W+', '_', participant_name.strip())
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -513,7 +479,12 @@ if st.session_state.page == max_page:
                 level = "Performing Leader"
 
 
-            
+            # Collect contextual inputs
+            participant_role = st.session_state.get("job_function", "a professional")
+            participant_industry = st.session_state.get("industry", "their industry")
+            country_work = st.session_state.get("country_work", "their country of work")
+            birth_country = st.session_state.get("birth_country", "their country of origin")
+
     
             import matplotlib.pyplot as plt
             import seaborn as sns
